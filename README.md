@@ -28,6 +28,7 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 | **[Breath Cycle](./breath-cycle/)** | v0.1 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design |
 | **[Three-Layer Model](./three-layer/)** | v0.1 | **Extensibility** — Extensions (code) + Skills (knowledge) + Rituals (workflows) |
 | **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
+| **[Git Identity](./git-identity/)** | v0.1 | **Multi-repo attribution** — path-based author resolution, agent vs human commits |
 
 ### How They Fit Together
 
