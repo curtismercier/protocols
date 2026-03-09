@@ -3,7 +3,7 @@ type: spec
 status: active
 version: 0.1.0
 created: 2026-03-07
-updated: 2026-03-07
+updated: 2026-03-09
 author: Curtis Mercier
 license: CC BY 4.0
 ---
@@ -24,7 +24,7 @@ Define every identity that commits to your repositories:
 
 | Identity | Name | Email | Type | Used For |
 |----------|------|-------|------|----------|
-| **personal** | Curtis Mercier | github@gravicity.ai | human | Personal repos, protocols, open source, meetsoma |
+| **personal** | Curtis Mercier | curtis@gravicity.ai | human | Personal repos, protocols, open source, meetsoma |
 | **business** | Gravicity | accounts@gravicity.ca | org | Client work, infra, internal tools |
 | **agent** | Soma | soma-agent@gravicity.ai | bot | Automated commits by Soma (maintenance, memory, scheduled) |
 
@@ -64,7 +64,7 @@ Git's `includeIf` maps directory paths to identity configs:
 
 [user]
     name = Curtis Mercier
-    email = github@gravicity.ai
+    email = curtis@gravicity.ai
 ```
 
 ### 3.1 Why Global Defaults to Business
@@ -82,7 +82,7 @@ For repos that don't fit the path convention:
 ```bash
 cd /path/to/special-repo
 git config user.name "Curtis Mercier"
-git config user.email "github@gravicity.ai"
+git config user.email "curtis@gravicity.ai"
 ```
 
 This lives in `.git/config` and overrides everything.
@@ -121,7 +121,7 @@ Every email used for commits must be added to the correct GitHub account:
 
 | Email | Add To Account | Purpose |
 |-------|----------------|---------|
-| `github@gravicity.ai` | `curtismercier` | Personal commits show on your profile |
+| `curtis@gravicity.ai` | `curtismercier` | Personal commits show on your profile |
 | `accounts@gravicity.ca` | `gravicity-archive` or org | Business commits |
 | `soma-agent@gravicity.ai` | (future bot account) | Agent commits |
 
@@ -152,19 +152,19 @@ git config user.name && git config user.email
 git log --format="%ae %an" -5
 
 # Find misattributed commits
-git log --format="%ae %an %s" | grep -v "github@gravicity.ai" | grep -v "accounts@gravicity.ca"
+git log --format="%ae %an %s" | grep -v "curtis@gravicity.ai" | grep -v "accounts@gravicity.ca"
 ```
 
 ### 7.1 Fix Misattributed Commits (Before Push)
 
 ```bash
 # Amend the last commit
-git commit --amend --author="Curtis Mercier <github@gravicity.ai>" --no-edit
+git commit --amend --author="Curtis Mercier <curtis@gravicity.ai>" --no-edit
 
 # Rewrite last N commits
 git rebase -i HEAD~N
 # mark commits as "edit", then:
-git commit --amend --author="Curtis Mercier <github@gravicity.ai>" --no-edit
+git commit --amend --author="Curtis Mercier <curtis@gravicity.ai>" --no-edit
 git rebase --continue
 ```
 
@@ -174,9 +174,9 @@ git rebase --continue
 git filter-branch --env-filter '
 if [ "$GIT_AUTHOR_EMAIL" = "wrong@email.com" ]; then
     export GIT_AUTHOR_NAME="Curtis Mercier"
-    export GIT_AUTHOR_EMAIL="github@gravicity.ai"
+    export GIT_AUTHOR_EMAIL="curtis@gravicity.ai"
     export GIT_COMMITTER_NAME="Curtis Mercier"
-    export GIT_COMMITTER_EMAIL="github@gravicity.ai"
+    export GIT_COMMITTER_EMAIL="curtis@gravicity.ai"
 fi' HEAD
 
 git push --force
