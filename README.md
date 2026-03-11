@@ -15,7 +15,7 @@
 
 ## What This Is
 
-Five protocol specifications that define how AI agents can persist memory, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
+Six protocol specifications that define how AI agents can persist memory, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
 
 These protocols were invented while building **[Soma](https://soma.gravicity.ai)**, an AI coding agent with self-growing memory. They're published here as standalone specifications that any agent framework can implement.
 
@@ -23,27 +23,27 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 
 | Protocol | Spec | Description |
 |----------|------|-------------|
-| **[AMP](./amp/)** | v0.1 | **Agent Memory Protocol** — filesystem-based persistent memory with muscles, preloads, heat tracking, and promotion |
+| **[AMP](./amp/)** | v0.2 | **Agent Memory Protocol** — filesystem-based persistent memory with muscles, protocols, heat tracking, checkpoints, and pattern evolution |
 | **[ATLAS](./atlas/)** | v0.1 | **Architecture Truth Layered Across Stacks** — living system maps with frontmatter standards and hierarchy |
-| **[Breath Cycle](./breath-cycle/)** | v0.1 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design |
-| **[Three-Layer Model](./three-layer/)** | v0.1 | **Extensibility** — Extensions (code) + Skills (knowledge) + Rituals (workflows) |
+| **[Breath Cycle](./breath-cycle/)** | v0.2 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design constraint |
+| **[Capability Model](./three-layer/)** | v0.2 | **Agent capabilities** — Extensions, Skills, Muscles, Protocols, Rituals, Scripts. Six types, each with different nature and authorship |
 | **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
-| **[Git Identity](./git-identity/)** | v0.1 | **Multi-repo attribution** — path-based author resolution, agent vs human commits |
+| **[Git Identity](./git-identity/)** | v0.2 | **Multi-repo attribution** — identity zones, path-based resolution, agent vs human commits |
 
 ### How They Fit Together
 
 ```
-┌─────────────────────────────────────────────┐
-│  Identity System    → who am I here?        │
-│  Breath Cycle       → session lifecycle     │
-│  AMP                → what do I remember?   │
-│  ATLAS              → what does this system  │
-│                       look like?            │
-│  Three-Layer Model  → how am I extended?    │
-└─────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────┐
+│  Identity System     → who am I here?            │
+│  Breath Cycle        → session lifecycle          │
+│  AMP                 → what do I remember?        │
+│  ATLAS               → what does this system      │
+│                        look like?                 │
+│  Capability Model    → what can I do?             │
+└──────────────────────────────────────────────────┘
 ```
 
-An agent boots, discovers its **identity**, **inhales** (loads preload + muscles via **AMP**), reads the **ATLAS** state, works with its **three-layer** capabilities, then **exhales** (writes preload) when context fills up. The cycle repeats.
+An agent boots, discovers its **identity**, **inhales** (loads preload + muscles via **AMP**), reads the **ATLAS** state, works with its full **capability model** (extensions fire, skills load, muscles apply, protocols enforce), then **exhales** (writes preload, commits checkpoints) when context fills up. The cycle repeats. Over time, muscles strengthen, patterns crystallize into protocols and scripts, and the agent gets better — not just within a session, but across sessions.
 
 ## The Core Idea
 
@@ -60,7 +60,7 @@ This works because:
 
 ## Status
 
-These specs are in **draft v0.1**. They describe systems that are implemented and working in Soma, but the spec documents are still being formalized.
+These specs are in **draft** (v0.1–v0.2). They describe systems that are implemented and working in Soma, but the spec documents are still being refined.
 
 Feedback, questions, and implementation reports welcome — [open an issue](https://github.com/curtismercier/protocols/issues).
 
@@ -75,7 +75,7 @@ by Curtis Mercier (https://github.com/curtismercier/protocols)
 
 ## Reference Implementation
 
-**[Soma](https://soma.gravicity.ai)** is the reference implementation. MIT-licensed, open source.
+**[Soma](https://soma.gravicity.ai)** is the reference implementation. Open source.
 
 - GitHub: **[github.com/meetsoma](https://github.com/meetsoma)**
 - Website: **[soma.gravicity.ai](https://soma.gravicity.ai)**

@@ -1,9 +1,9 @@
 ---
 type: spec
 status: active
-version: 0.1.0
+version: 0.2.0
 created: 2026-03-07
-updated: 2026-03-09
+updated: 2026-03-10
 author: Curtis Mercier
 license: CC BY 4.0
 ---
@@ -18,19 +18,19 @@ When you operate across multiple GitHub accounts, orgs, and automated agents, gi
 
 This compounds when AI agents start making commits on your behalf — their work should be visible but distinguishable from yours.
 
-## 2. Identity Table
+## 2. Identity Zones
 
 Define every identity that commits to your repositories:
 
-| Identity | Name | Email | Type | Used For |
-|----------|------|-------|------|----------|
-| **personal** | Curtis Mercier | curtis@gravicity.ai | human | Personal repos, protocols, open source, meetsoma |
-| **business** | Gravicity | accounts@gravicity.ca | org | Client work, infra, internal tools |
-| **agent** | Soma | soma-agent@gravicity.ai | bot | Automated commits by Soma (maintenance, memory, scheduled) |
+| Zone | Type | Used For |
+|------|------|----------|
+| **personal** | human | Personal repos, open source, your own projects |
+| **business** | org | Client work, company repos, internal tools |
+| **agent** | bot | Automated commits (maintenance, memory, scheduled tasks) |
 
 ### 2.1 Rules
 
-- **Human work → human identity.** If you wrote it, your name goes on it.
+- **Human work → human identity.** If you wrote it or directed an agent to write it, your name goes on it.
 - **Bot work → bot identity.** If an agent wrote it autonomously (scheduled tasks, auto-updates), use the agent identity.
 - **Agent-assisted human work → human identity.** If you directed an agent to write code in a session, that's your commit. You're the author. The agent is the tool.
 - **Never let a bot identity land on personal repos by accident.** That's what this protocol prevents.
@@ -43,19 +43,15 @@ Git's `includeIf` maps directory paths to identity configs:
 # ~/.gitconfig
 
 [user]
-    name = Gravicity
-    email = accounts@gravicity.ca
+    name = Your Company
+    email = team@company.com
 
 # Personal repos override
-[includeIf "gitdir:~/Gravicity/personal/"]
-    path = ~/.gitconfig-personal
-
-# Product repos (meetsoma) — you're the author
-[includeIf "gitdir:~/Gravicity/products/soma/"]
-    path = ~/.gitconfig-personal
-
-# Any repo cloned under ~/personal/ or ~/oss/
 [includeIf "gitdir:~/personal/"]
+    path = ~/.gitconfig-personal
+
+# Product repos — you're the author
+[includeIf "gitdir:~/workspace/products/"]
     path = ~/.gitconfig-personal
 ```
 
@@ -63,15 +59,14 @@ Git's `includeIf` maps directory paths to identity configs:
 # ~/.gitconfig-personal
 
 [user]
-    name = Curtis Mercier
-    email = curtis@gravicity.ai
+    name = Your Name
+    email = you@example.com
 ```
 
 ### 3.1 Why Global Defaults to Business
 
-The global default is the **business** identity because:
-- Client repos (`clients/`) are the most common workspace
-- Infra repos should be attributed to the org
+The global default should be the **business** identity because:
+- Client/company repos are often the most common workspace
 - Business is the safe default — you actively opt-in to personal attribution
 - Forgetting to configure means commits go to the org (recoverable), not the other way around
 
@@ -81,28 +76,26 @@ For repos that don't fit the path convention:
 
 ```bash
 cd /path/to/special-repo
-git config user.name "Curtis Mercier"
-git config user.email "curtis@gravicity.ai"
+git config user.name "Your Name"
+git config user.email "you@example.com"
 ```
-
-This lives in `.git/config` and overrides everything.
 
 ## 4. Agent Commits
 
-When Soma (or any agent) makes **autonomous** commits — scheduled maintenance, memory crystallization, automated PRs — use a dedicated bot identity:
+When an agent makes **autonomous** commits — scheduled maintenance, memory crystallization, automated PRs — use a dedicated bot identity:
 
 ```bash
-git -c user.name="Soma" -c user.email="soma-agent@gravicity.ai" commit -m "chore: crystallize memory muscles"
+git -c user.name="Agent" -c user.email="agent@example.com" commit -m "chore: crystallize memory"
 ```
 
 ### 4.1 Co-Authored Commits
 
-When a human directs an agent to write code, the human is the author. Optionally credit the agent as co-author:
+When a human directs an agent to write code, the human is the author. Optionally credit the agent:
 
 ```
 feat: add protocol heat tracking
 
-Co-authored-by: Soma <soma-agent@gravicity.ai>
+Co-authored-by: Agent <agent@example.com>
 ```
 
 ### 4.2 GitHub App Commits
@@ -110,22 +103,14 @@ Co-authored-by: Soma <soma-agent@gravicity.ai>
 For GitHub Apps that push commits (CI bots, dependabot-style):
 
 ```
-Author: gravicity-app[bot] <123456+gravicity-app[bot]@users.noreply.github.com>
+Author: your-app[bot] <123456+your-app[bot]@users.noreply.github.com>
 ```
 
 GitHub recognizes the `[bot]` suffix and shows the bot badge automatically.
 
 ## 5. Email Registration
 
-Every email used for commits must be added to the correct GitHub account:
-
-| Email | Add To Account | Purpose |
-|-------|----------------|---------|
-| `curtis@gravicity.ai` | `curtismercier` | Personal commits show on your profile |
-| `accounts@gravicity.ca` | `gravicity-archive` or org | Business commits |
-| `soma-agent@gravicity.ai` | (future bot account) | Agent commits |
-
-**If an email isn't registered**, GitHub can't link the commit to a profile. The contribution graph stays empty.
+Every email used for commits must be added to the correct GitHub account. If an email isn't registered, GitHub can't link the commit to a profile. The contribution graph stays empty.
 
 ## 6. Verification (Optional)
 
@@ -151,38 +136,9 @@ git config user.name && git config user.email
 # Who authored recent commits?
 git log --format="%ae %an" -5
 
-# Find misattributed commits
-git log --format="%ae %an %s" | grep -v "curtis@gravicity.ai" | grep -v "accounts@gravicity.ca"
+# Find misattributed commits (before push)
+git commit --amend --author="Name <email>" --no-edit
 ```
-
-### 7.1 Fix Misattributed Commits (Before Push)
-
-```bash
-# Amend the last commit
-git commit --amend --author="Curtis Mercier <curtis@gravicity.ai>" --no-edit
-
-# Rewrite last N commits
-git rebase -i HEAD~N
-# mark commits as "edit", then:
-git commit --amend --author="Curtis Mercier <curtis@gravicity.ai>" --no-edit
-git rebase --continue
-```
-
-### 7.2 Fix Misattributed Commits (After Push)
-
-```bash
-git filter-branch --env-filter '
-if [ "$GIT_AUTHOR_EMAIL" = "wrong@email.com" ]; then
-    export GIT_AUTHOR_NAME="Curtis Mercier"
-    export GIT_AUTHOR_EMAIL="curtis@gravicity.ai"
-    export GIT_COMMITTER_NAME="Curtis Mercier"
-    export GIT_COMMITTER_EMAIL="curtis@gravicity.ai"
-fi' HEAD
-
-git push --force
-```
-
-⚠️ Force-push rewrites history. Only do this on repos where you're the sole contributor or with team coordination.
 
 ## 8. Attribution
 
@@ -194,4 +150,4 @@ Licensed under CC BY 4.0
 
 ---
 
-*Git Identity Protocol v0.1 — Curtis Mercier — CC BY 4.0*
+*Git Identity Protocol v0.2 — Curtis Mercier — CC BY 4.0*

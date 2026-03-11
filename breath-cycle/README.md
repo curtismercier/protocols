@@ -1,14 +1,14 @@
 ---
 type: spec
 status: draft
-version: 0.1.0
+version: 0.2.0
 created: 2026-03-10
 updated: 2026-03-10
 author: Curtis Mercier
 license: CC BY 4.0
 ---
 
-# Breath Cycle — Specification v0.1
+# Breath Cycle — Specification v0.2
 
 > A lifecycle model for AI agent sessions that embraces context depletion as a design constraint rather than a limitation.
 
@@ -83,6 +83,8 @@ Context is running out. The agent prepares for the transition.
 
 The exhale is deliberate, not panicked. The agent has been aware of its depleting context throughout the process phase.
 
+**Checkpoints:** On exhale, the agent also commits state to its checkpoint tracks (see AMP spec §8). The internal track (`.soma/` local git) captures memory changes. The project track captures code checkpoints. These provide diffs on the next inhale — "what changed since I was last here?" — without re-reading everything.
+
 ### 2.4 Rest (Between Sessions)
 
 The agent isn't running, but its memory persists.
@@ -152,5 +154,5 @@ Licensed under CC BY 4.0
 
 ---
 
-*Breath Cycle v0.1 — Curtis Mercier — CC BY 4.0*
+*Breath Cycle v0.2 — Curtis Mercier — CC BY 4.0*
 *Reference implementation: Soma (soma.gravicity.ai)*

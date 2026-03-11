@@ -1,16 +1,18 @@
 ---
 type: spec
 status: draft
-version: 0.1.0
+version: 0.2.0
 created: 2026-03-10
 updated: 2026-03-10
 author: Curtis Mercier
 license: CC BY 4.0
 ---
 
-# Three-Layer Extensibility Model — Specification v0.1
+# Agent Capability Model — Specification v0.2
 
-> A separation of concerns for agent capabilities into extensions (code), skills (knowledge), and rituals (workflows).
+> A separation of concerns for agent capabilities into six types, each with a different nature, authorship profile, and lifecycle.
+
+*Previously: Three-Layer Extensibility Model (v0.1). Expanded to reflect the full hierarchy that emerged from practice.*
 
 ## 1. Motivation
 
@@ -19,15 +21,18 @@ Single-layer agent extensibility doesn't scale:
 - **Prompts-only** (like ChatGPT custom instructions): can teach, can't automate. Knowledge without action.
 - **Undifferentiated** (everything in one bucket): the junk drawer. Is this a plugin? A prompt? A template?
 
-Three layers, each with a clear purpose, different authorship profiles, and different lifecycles.
+Six capability types, each with a clear purpose, different authorship profiles, and different lifecycles.
 
-## 2. The Layers
+## 2. The Capabilities
 
-| Layer | What | File Type | Author | Lifecycle |
-|-------|------|-----------|--------|-----------|
+| Capability | Nature | File Type | Author | Loads |
+|-----------|--------|-----------|--------|-------|
 | **Extension** | Code hook into agent lifecycle | TypeScript/Python | Developer | Fires on events, automatic |
-| **Skill** | Domain knowledge loaded on demand | Markdown | Domain expert | Loaded when relevant, read |
-| **Ritual** | Multi-step workflow triggered by command | Markdown + config | Workflow designer | Triggered by user, stepped |
+| **Skill** | Domain knowledge, on demand | Markdown | Anyone | When task matches |
+| **Muscle** | Learned pattern from experience | Markdown | Agent + user | By heat, digest-first |
+| **Protocol** | Behavioral rule, enforced | Markdown | System designer | By heat, full or breadcrumb |
+| **Ritual** | Multi-step workflow | Markdown + config | Workflow designer | Triggered by command |
+| **Script** | Automated enforcement | Bash/Python | Developer | Executed, not loaded into prompt |
 
 ### 2.1 Extensions (Reflex Layer)
 
@@ -40,11 +45,10 @@ before_send → validator extension fires → checks output
 ```
 
 **Properties:**
-- Written in the agent framework's language (TypeScript, Python, etc.)
+- Written in the agent framework's language
 - Execute automatically when their event fires
 - Can modify state, call APIs, write files, interact with the runtime
 - Same event → same behavior (deterministic)
-- Installed to: `.soma/extensions/` (project) or `~/.soma/agent/extensions/` (global)
 
 **Examples:** Boot sequence, context monitoring, statusline, git hooks, auto-formatting.
 
@@ -52,91 +56,92 @@ before_send → validator extension fires → checks output
 
 Markdown files containing domain expertise that the agent reads and follows.
 
-```markdown
----
-name: favicon-gen
-type: skill
-description: Generate favicons from logos, text, or brand colors
-keywords: [favicon, icon, branding]
----
-
-# Favicon Generation
-
-When the user asks to create favicons, follow these steps:
-1. Ask for the source (logo file, text, or brand colors)
-2. Generate SVG source at multiple sizes...
-```
-
 **Properties:**
 - Pure Markdown — no code execution
 - Loaded into agent context when the task matches (keyword/description matching)
 - The agent reads the skill and follows its instructions
 - Anyone can write a skill — lowest barrier to contribution
-- Installed to: `.soma/skills/` (project) or `~/.soma/agent/skills/` (global)
-
-**Resolution order:** project → parent workspace → user-global → remote registry
+- Framework-agnostic: a skill from Claude Code, Cursor, or any framework works without modification
 
 **Examples:** "How to deploy to Vercel", "SVG logo design principles", "cPanel DNS management".
 
-### 2.3 Rituals (Workflow Layer)
+**What makes skills special:** They're the universal building block. Other systems have skills too. What AMP adds is the *refinement layer* — muscles and protocols that personalize skills through use. A logo design skill teaches the technique. A muscle learns *your* preferences. A protocol enforces *your* standards. The skill provides raw expertise; the layers above improve it every time it's used, without the user ever asking.
+
+### 2.3 Muscles (Learning Layer)
+
+Patterns the agent discovered through experience and encoded for future reuse.
+
+**Properties:**
+- Born from gaps — moments where friction was noticed, a pattern repeated, a workflow failed
+- Grow through use: heat rises on application, decays on neglect
+- Two-tier loading: digest (compressed) for tight context, full body when space allows
+- The richest source of muscles is observing the *user's* patterns — how they like PRs, what they always verify, their communication preferences
+
+**Examples:** "Always run tests after file removal", "User prefers concise responses", "This API returns paginated results — always check for next page".
+
+**The key insight:** Muscles aren't instructions the user wrote. They're patterns the agent noticed and encoded. The user's repeated behaviors are the richest source of new muscles.
+
+### 2.4 Protocols (Instinct Layer)
+
+Behavioral rules that the agent follows. Skipping them causes mistakes.
+
+**Properties:**
+- Carry a `breadcrumb` field — a 1-2 sentence TL;DR for warm loading
+- Heat-based loading: hot protocols inject fully, warm protocols inject as breadcrumbs
+- Domain-scoped via `applies-to` tags — a TypeScript protocol only loads in TypeScript projects
+- Include `## When to Apply` and `## When NOT to Apply` sections
+
+**Examples:** "Every file gets YAML frontmatter", "Never skip exhale", "Commits must be attributed to the correct identity".
+
+### 2.5 Rituals (Workflow Layer)
 
 Multi-step procedures triggered by a command, combining knowledge with structured execution.
-
-```markdown
----
-name: publish
-type: ritual
-trigger: /publish
-description: Write, commit, push, and deploy a blog post
----
-
-# /publish Ritual
-
-## Step 1: Plan
-Ask the user for title and topic...
-
-## Step 2: Draft
-Write the post with proper frontmatter...
-
-## Step 3: Review
-Verify content, ask for approval...
-
-## Step 4: Ship
-Git add, commit, push, deploy...
-```
 
 **Properties:**
 - Triggered by a command (e.g., `/publish`, `/release`)
 - Multi-step with explicit phases
 - Conversational — each step involves the user
 - Can reference skills and trigger extensions
-- Stateful: can track which step the agent is on
-- Installed to: `.soma/rituals/` (project) or `~/.soma/agent/rituals/` (global)
+- Stateful: tracks which step the agent is on
 
-**Examples:** `/publish` (blog post), `/release` (software release), `/review` (code review workflow).
+**Examples:** `/publish` (blog post), `/release` (software version), `/review` (code review workflow).
 
-## 3. Why Three and Not Two
+### 2.6 Scripts (Enforcement Layer)
 
-The three layers map to different **authorship profiles**:
+The final crystallization — what was once a behavioral rule the agent followed manually becomes code that runs automatically.
+
+**Properties:**
+- Executable code (bash, python, etc.)
+- Run by the agent or by CI/hooks — not loaded into the prompt
+- Often paired with a protocol: the protocol explains *why*, the script enforces *how*
+- The protocol doesn't disappear when a script exists — it remains the reasoning layer
+
+**Examples:** PII audit script (enforces community-safe protocol), frontmatter validator (enforces frontmatter-standard), drift checker (enforces code sync between repos).
+
+## 3. How Capabilities Relate
+
+### 3.1 The Evolution Path
+
+Capabilities aren't created equal — they evolve from observation:
 
 ```
-                    Barrier to Create
-                    ─────────────────►
-                    Low           High
-
-Extensions    ░░░░░░░░░░░░░░░░████████████  (developer required)
-Skills        ████████████████░░░░░░░░░░░░  (anyone can write Markdown)
-Rituals       ░░░░████████████████░░░░░░░░  (workflow design, medium skill)
+observation (noticed gap, repeated action)
+  ↓ seen 2+ times
+muscle (learned pattern)
+  ↓ crystallizes based on nature
+  ├──→ protocol  (behavioral rule — how to be)
+  ├──→ skill     (domain knowledge — how to know)
+  ├──→ ritual    (workflow — how to do)
+  └──→ script    (automation — how to enforce)
 ```
 
-This maps to the open source contribution funnel:
-- **Many** skill authors (domain experts, users, the agent itself)
-- **Some** ritual designers (power users who define workflows)
-- **Few** extension developers (need framework knowledge)
+A muscle doesn't choose its destination consciously. It becomes whatever it naturally is:
+- A testing pattern you must always follow → **protocol**
+- A logo design technique you sometimes need → **skill**
+- A publish workflow you repeat every release → **ritual**
+- A protocol whose checks can be automated → **script**
 
-The easy stuff has the lowest barrier. This is how communities scale.
-
-## 4. Interaction Between Layers
+### 3.2 Composition
 
 Layers can reference each other:
 
@@ -144,35 +149,56 @@ Layers can reference each other:
 Ritual "/release"
   ├── loads Skill "semantic-versioning" (knowledge)
   ├── triggers Extension "git-tag" (automation)
-  └── loads Skill "changelog-format" (knowledge)
+  ├── follows Protocol "git-identity" (rule)
+  └── runs Script "audit.sh" (enforcement)
 ```
 
-- Rituals compose skills and extensions
-- Extensions can load skills into context
-- Skills are standalone — they don't depend on extensions or rituals
+The dependency flows naturally: **Rituals compose everything. Extensions can load skills. Protocols inform scripts. Skills are standalone.**
 
-The dependency flows one way: **Rituals → Extensions → Skills**. Skills are the foundation.
+### 3.3 Authorship Funnel
 
-## 5. Directory Structure
+```
+                    Barrier to Create
+                    ─────────────────►
+                    Low           High
+
+Skills        ████████████████░░░░░░░░░░░░  (anyone — Markdown)
+Muscles       ████████████░░░░░░░░░░░░░░░░  (agent + user — observed patterns)
+Protocols     ░░░░████████████░░░░░░░░░░░░  (system designer — rules)
+Rituals       ░░░░████████████████░░░░░░░░  (workflow designer — multi-step)
+Scripts       ░░░░░░░░░░░░████████████████  (developer — code)
+Extensions    ░░░░░░░░░░░░░░░░████████████  (developer — framework knowledge)
+```
+
+The easy stuff has the lowest barrier. This is how communities scale — many skill authors, some ritual designers, few extension developers.
+
+## 4. Directory Structure
 
 ```
 .soma/
-├── extensions/          # Project-level code hooks
-│   └── pre-commit.ts
-├── skills/              # Project-level knowledge
+├── extensions/          # Code hooks
+│   └── boot.ts
+├── skills/              # Domain knowledge
 │   └── deploy/
 │       └── SKILL.md
-└── rituals/             # Project-level workflows
-    └── release/
-        └── SKILL.md
-
-~/.soma/agent/
-├── extensions/          # User-global code hooks
-├── skills/              # User-global knowledge
-└── rituals/             # User-global workflows
+├── memory/
+│   └── muscles/         # Learned patterns
+│       └── git-workflow.md
+├── protocols/           # Behavioral rules
+│   └── breath-cycle.md
+├── rituals/             # Multi-step workflows
+│   └── release/
+│       └── SKILL.md
+├── scripts/             # Automated enforcement
+│   └── audit.sh
+├── identity.md
+├── STATE.md
+└── settings.json
 ```
 
-## 6. Skill Index (Registry)
+Resolution order for all types: **project → parent workspace → user-global → remote registry**.
+
+## 5. Skill Registry
 
 Skills (and rituals) can be distributed via a JSON registry:
 
@@ -186,26 +212,24 @@ Skills (and rituals) can be distributed via a JSON registry:
       "author": "Curtis Mercier",
       "license": "MIT",
       "keywords": ["favicon", "icon"],
-      "category": "design",
       "path": "skills/favicon-gen/"
     }
   ]
 }
 ```
 
-Discovery: `soma skill list --remote`
-Install: `soma skill install favicon-gen`
-Resolution: project → parent → global → registry
+Discovery, installation, and resolution are implementation-defined.
 
-## 7. Attribution
+## 6. Attribution
 
 ```
-This project uses the Three-Layer Extensibility Model
+This project uses the Agent Capability Model
 by Curtis Mercier (https://github.com/curtismercier/protocols)
 Licensed under CC BY 4.0
 ```
 
 ---
 
-*Three-Layer Model v0.1 — Curtis Mercier — CC BY 4.0*
+*Agent Capability Model v0.2 — Curtis Mercier — CC BY 4.0*
+*Previously: Three-Layer Extensibility Model v0.1*
 *Reference implementation: Soma (soma.gravicity.ai)*
