@@ -1,14 +1,18 @@
 ---
 type: spec
-status: draft
+status: archived
 version: 0.2.0
 created: 2026-03-10
-updated: 2026-03-10
+updated: 2026-03-11
 author: Curtis Mercier
 license: CC BY 4.0
+superseded-by: amps/1.0
 ---
 
-# Agent Capability Model — Specification v0.2
+# Agent Capability Model — Specification v0.2 (ARCHIVED)
+
+> **⚠️ This spec has been superseded by [AMPS v1.0](../amps/) (Agent Memory Protocol Stack).**
+> Key changes: Rituals → Automations, Extensions + Scripts reclassified as runtime layer (not content types), `depends-on` field added, formal AMP extension relationship.
 
 > A separation of concerns for agent capabilities into six types, each with a different nature, authorship profile, and lifecycle.
 

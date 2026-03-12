@@ -15,7 +15,7 @@
 
 ## What This Is
 
-Six protocol specifications that define how AI agents can persist memory, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
+Seven protocol specifications that define how AI agents can persist memory, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
 
 These protocols were invented while building **[Soma](https://soma.gravicity.ai)**, an AI coding agent with self-growing memory. They're published here as standalone specifications that any agent framework can implement.
 
@@ -23,12 +23,16 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 
 | Protocol | Spec | Description |
 |----------|------|-------------|
-| **[AMP](./amp/)** | v0.2 | **Agent Memory Protocol** — filesystem-based persistent memory with muscles, protocols, heat tracking, checkpoints, and pattern evolution |
+| **[AMP](./amp/)** | v0.3 | **Agent Memory Protocol** — filesystem-based persistent memory with heat tracking, checkpoints, flush pipeline, and pattern evolution |
+| **[AMPS](./amps/)** | v1.0 | **Agent Memory Protocol Stack** — four content types that extend AMP: Automations, Muscles, Protocols, Skills |
 | **[ATLAS](./atlas/)** | v0.1 | **Architecture Truth Layered Across Stacks** — living system maps with frontmatter standards and hierarchy |
 | **[Breath Cycle](./breath-cycle/)** | v0.2 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design constraint |
-| **[Capability Model](./three-layer/)** | v0.2 | **Agent capabilities** — Extensions, Skills, Muscles, Protocols, Rituals, Scripts. Six types, each with different nature and authorship |
 | **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
 | **[Git Identity](./git-identity/)** | v0.2 | **Multi-repo attribution** — identity zones, path-based resolution, agent vs human commits |
+
+| Archived | | |
+|----------|------|-------------|
+| ~~[Capability Model](./three-layer/)~~ | v0.2 | Superseded by **AMPS v1.0** |
 
 ### How They Fit Together
 
@@ -36,14 +40,16 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 ┌──────────────────────────────────────────────────┐
 │  Identity System     → who am I here?            │
 │  Breath Cycle        → session lifecycle          │
-│  AMP                 → what do I remember?        │
+│  AMP                 → how do I remember?         │
+│  AMPS                → what do I remember?        │
+│                        (Skills, Muscles,          │
+│                         Protocols, Automations)   │
 │  ATLAS               → what does this system      │
 │                        look like?                 │
-│  Capability Model    → what can I do?             │
 └──────────────────────────────────────────────────┘
 ```
 
-An agent boots, discovers its **identity**, **inhales** (loads preload + muscles via **AMP**), reads the **ATLAS** state, works with its full **capability model** (extensions fire, skills load, muscles apply, protocols enforce), then **exhales** (writes preload, commits checkpoints) when context fills up. The cycle repeats. Over time, muscles strengthen, patterns crystallize into protocols and scripts, and the agent gets better — not just within a session, but across sessions.
+An agent boots, discovers its **identity**, **inhales** (loads preload + AMPS content via **AMP**), reads the **ATLAS** state, and works — skills load on demand, muscles apply from experience, protocols enforce rules, automations execute workflows. Then it **exhales** (writes preload, commits checkpoints) when context fills up. The cycle repeats. Over time, muscles strengthen, patterns crystallize into protocols and automations, and the agent gets better — not just within a session, but across sessions.
 
 ## The Core Idea
 
