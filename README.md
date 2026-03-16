@@ -15,7 +15,7 @@
 
 ## What This Is
 
-Nine protocol specifications that define how AI agents can persist memory, navigate knowledge, orchestrate multi-phase work, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
+Eleven protocol specifications that define how AI agents can persist memory, navigate knowledge, orchestrate multi-phase work, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
 
 These protocols were invented while building **[Soma](https://soma.gravicity.ai)**, an AI coding agent with self-growing memory. They're published here as standalone specifications that any agent framework can implement.
 
@@ -27,6 +27,8 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 | **[AMPS](./amps/)** | v1.0 | **Agent Memory Protocol Stack** — four content types that extend AMP: Automations, Muscles, Protocols, Skills |
 | **[MAPS](./maps/)** | v0.1 | **My Automation Protocol Scripts** — navigation layer over AMPS. Task-specific paths through knowledge, with progressive phase chains |
 | **[PHASE](./phase/)** | v0.1 | **Prompt Handoff for Agent Session Evolution** — plan-driven brain configuration and cascading refinement across phases |
+| **[SEAMS](./seams/)** | v0.1 | **Session Evolution Archival for Memory Systems** — traceable connections between every artifact. Pull any seam and the whole chain follows |
+| **[SEEDS](./seeds/)** | v0.1 | **Self-Evolving Experience Discovery Structure** — templates that grow structure. Drop a seed in any folder and it tells the agent how to grow |
 | **[ATLAS](./atlas/)** | v0.1 | **Architecture Truth Layered Across Stacks** — living system maps with frontmatter standards and hierarchy |
 | **[Breath Cycle](./breath-cycle/)** | v0.2 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design constraint |
 | **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
@@ -38,29 +40,39 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 
 ### How They Fit Together
 
+The protocol family shares DNA — the same letters recombining. They don't just stack linearly. They **cross-sect** through shared letters, with PHASE as the vertical spine:
+
+```
+  A M P S           ← what do I know?        (content types)
+      H
+  M A P S           ← how do I navigate?     (task paths)
+      S E A M S     ← how do I trace?        (connections)
+    S E E D S       ← how do I grow?         (templates)
+      ↑
+    PHASE            ← how am I configured?
+```
+
+**PHASE is the spine** because when you enter any phase of work, it configures the agent's entire relationship to every other protocol — which AMPS content loads, which MAPS to follow, which SEAMS to trace, which SEEDS to use. Everything flows through PHASE.
+
+The intersection points aren't decorative — they're where the concepts genuinely meet:
+- **AMPS** crosses PHASE at **P** — content is loaded per-phase
+- **MAPS** crosses PHASE at **A** — every MAP belongs to a phase
+- **SEAMS** crosses PHASE at **S** — every seam traces through sessions
+- **SEEDS** crosses PHASE at **E** — every seed evolves through experience
+
+The supporting protocols complete the system:
+
 ```
 ┌──────────────────────────────────────────────────┐
 │  Identity System     → who am I here?            │
 │  Breath Cycle        → session lifecycle          │
 │  AMP                 → how do I remember?         │
-│  AMPS                → what do I remember?        │
-│                        (Skills, Muscles,          │
-│                         Protocols, Automations)   │
-│  MAPS                → how do I navigate?         │
-│  PHASE               → how do I evolve?           │
 │  ATLAS               → what does this system      │
 │                        look like?                 │
 └──────────────────────────────────────────────────┘
 ```
 
-The protocol family shares DNA — the same letters recombining at each layer:
-
-```
-AMP  → AMPS → MAPS → PHASE
-store   define  navigate  orchestrate
-```
-
-Before an agent boots, **PHASE** assembles its brain — loading the assigned identity, relevant **AMPS** content, and **MAP** navigation into a system prompt architected for that specific task. The agent then boots already shaped for the work, reads the **ATLAS** state, and executes its MAP. Then it **exhales** — writes preload, commits checkpoints, and refines the next phase's configuration. Each completing agent shapes the next. Over time, the system gets smarter — not just within a session, but across sessions and across agents.
+Before an agent boots, **PHASE** assembles its brain — loading the assigned identity, relevant **AMPS** content, and **MAP** navigation into a system prompt architected for that specific task. The structure was grown from a **SEED** template. The agent boots already shaped for the work, reads the **ATLAS** state, and executes its MAP. Every artifact it creates is stamped with a **SEAM** — traceable back to the session hash that started it. Then it **exhales** — writes preload, commits checkpoints, and refines the next phase's configuration. Each completing agent shapes the next. Over time, the system gets smarter — not just within a session, but across sessions and across agents.
 
 ## The Core Idea
 

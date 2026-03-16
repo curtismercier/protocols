@@ -7,7 +7,7 @@ updated: 2026-03-16
 author: Curtis Mercier
 license: CC BY 4.0
 extends: amps/1.0
-complements: maps/0.1, breath-cycle/0.2
+complements: maps/0.1, breath-cycle/0.2, seams/0.1, seeds/0.1
 ---
 
 # PHASE — Prompt Handoff for Agent Session Evolution v0.1
@@ -234,17 +234,22 @@ When the session ends, all overrides die. Organic heat is unchanged. The next se
 ## 6. Relationship to Other Protocols
 
 ```
-AMP (memory)
-  └── AMPS (content types)
-        └── MAPS (navigation)
-              └── PHASE (orchestration)
-                    └── uses Breath Cycle (session lifecycle)
-                    └── uses Identity (agent identity chain)
+  A M P S           ← content types
+      H
+  M A P S           ← navigation
+      S E A M S     ← traceability
+    S E E D S       ← templates
+      ↑
+    PHASE            ← the spine
 ```
+
+PHASE is the vertical spine of the protocol family. Everything crosses through it:
 
 - **AMP** stores the files. PHASE configs live in MAP files, which live in the AMP filesystem.
 - **AMPS** defines the content. PHASE configures which AMPS content loads and how.
 - **MAPS** provides the steps. PHASE provides the brain configuration alongside those steps.
+- **SEAMS** traces connections. PHASE provides the context that SEAMS records — which brain config was active when each artifact was produced.
+- **SEEDS** grows structure. PHASE templates (in `_phase.md` seeds) include default `prompt-config`, so scaffolded phases come pre-configured.
 - **Breath Cycle** governs the session. PHASE operates within one breath — config applies for the inhale through exhale.
 - **Identity** provides the chain. PHASE adds a layer to that chain.
 
