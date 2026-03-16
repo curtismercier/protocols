@@ -113,6 +113,8 @@ Requirements for auto-continuation:
 - New session can be started programmatically
 - The new session's inhale consumes the preload from the previous exhale
 
+In multi-phase work, each breath can carry a different **[PHASE](../phase/)** configuration — the agent's brain reshapes between sessions. The completing agent refines the next session's configuration during exhale, so the next inhale boots a smarter agent.
+
 ## 4. Context Awareness
 
 The agent should know its own context state. Suggested thresholds:

@@ -31,7 +31,7 @@ Persistent knowledge stored as files on disk. Organized in a directory hierarchy
 ### 2.2 Content Types
 Memory consists of typed content — each type has a different nature, authorship profile, and loading behavior. AMP defines the mechanics (heat, flush, preload) that act on content. The content types themselves are defined by extensions to this protocol.
 
-The reference content type system is **[AMPS](../amps/)** (Agent Memory Protocol Stack), which defines four shareable content types: Automations, Muscles, Protocols, and Skills.
+The reference content type system is **[AMPS](../amps/)** (Agent Memory Protocol Stack), which defines four shareable content types: Automations, Muscles, Protocols, and Skills. For task-specific navigation through content, see **[MAPS](../maps/)**. For plan-driven configuration that shapes what loads and how, see **[PHASE](../phase/)**.
 
 ### 2.3 Heat
 A numeric measure of how frequently and recently a piece of content is accessed. High heat = frequently used = loads first. Heat decays over time — unused content cools off. This creates a natural relevance ranking without embeddings.
@@ -229,7 +229,7 @@ An AMP extension:
 - May define evolution paths between types
 - May define dependency resolution between content
 
-The reference extension is **[AMPS v1.0](../amps/)**.
+The reference extension is **[AMPS v1.0](../amps/)**. Navigation and orchestration extensions include **[MAPS](../maps/)** and **[PHASE](../phase/)**.
 
 ## 11. Implementation Notes
 

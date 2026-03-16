@@ -260,6 +260,8 @@ Not every piece of content climbs the full ladder. Some stay skills forever. A p
 
 **Skills can also be entry points from outside the system.** A skill written for another agent framework works immediately. AMPS muscles and protocols then refine it through use.
 
+For task-specific navigation through AMPS content, see **[MAPS](../maps/)** — tested paths through the stack for recurring tasks. For plan-driven configuration that controls what loads and how the agent thinks, see **[PHASE](../phase/)**.
+
 ### 4.1 Authorship Funnel
 
 ```

@@ -78,6 +78,8 @@ Identity is layered, not replaced.
 
 The project identity extends the base. The agent is still Soma — but specialized.
 
+In multi-phase work, **[PHASE](../phase/)** adds a third layer — a supplementary identity scoped to the current task. The chain becomes: base → project → phase. An architect in Phase 0, a builder in Phase 1, a migrator in Phase 2. Same agent, same project identity, different phase identity.
+
 ### 4.1 Override vs Extend
 
 - **Extend (default):** Project identity adds context. Base personality persists.

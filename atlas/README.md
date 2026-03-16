@@ -226,8 +226,9 @@ For agents: scan frontmatter at boot to know what's in progress, what's blocked,
 
 - ATLAS works with any documentation format that supports frontmatter (Markdown + YAML is the default)
 - No tooling required — it's a discipline, not a dependency
-- Agents that implement ATLAS should read STATE.md on boot to orient
+- Agents that implement ATLAS should read STATE.md on boot to orient — after identity and [PHASE](../phase/) configuration, before starting work
 - The frontmatter standard is shared with the AMP protocol (muscles, preloads use the same fields)
+- In multi-phase work ([MAPS](../maps/)), each phase may reference different ATLAS docs depending on scope
 
 ## 9. Attribution
 

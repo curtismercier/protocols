@@ -21,7 +21,7 @@ complements: maps/0.1, breath-cycle/0.2
 
 Most agent systems have one configuration: the system prompt. It's assembled at boot from whatever knowledge is "hot" — recently used muscles, recently referenced protocols. This works for general sessions. But when an agent is executing a specific plan, organic heat is the wrong signal.
 
-A refactoring session needs `incremental-refactor` hot, not because it was used recently, but because *the task requires it*. A blog session needs `voice-hygiene` hot, not `code-navigator`. The task knows what the agent needs. Heat doesn't.
+A refactoring session needs `incremental-refactor` hot — the task requires it, regardless of what happened last session. A blog session needs `voice-hygiene` hot, not `code-navigator`. The task knows what the agent needs. Heat doesn't.
 
 PHASE lets the task configure the agent. A plan declares which protocols should be hot, which muscles should load, what supplementary identity the agent should assume, and what sections of the system prompt matter. The agent boots with a brain shaped for the work.
 
