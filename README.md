@@ -15,7 +15,7 @@
 
 ## What This Is
 
-Seven protocol specifications that define how AI agents can persist memory, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
+Nine protocol specifications that define how AI agents can persist memory, navigate knowledge, orchestrate multi-phase work, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
 
 These protocols were invented while building **[Soma](https://soma.gravicity.ai)**, an AI coding agent with self-growing memory. They're published here as standalone specifications that any agent framework can implement.
 
@@ -25,6 +25,8 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 |----------|------|-------------|
 | **[AMP](./amp/)** | v0.3 | **Agent Memory Protocol** — filesystem-based persistent memory with heat tracking, checkpoints, flush pipeline, and pattern evolution |
 | **[AMPS](./amps/)** | v1.0 | **Agent Memory Protocol Stack** — four content types that extend AMP: Automations, Muscles, Protocols, Skills |
+| **[MAPS](./maps/)** | v0.1 | **My Automation Protocol Scripts** — navigation layer over AMPS. Task-specific paths through knowledge, with progressive phase chains |
+| **[PHASE](./phase/)** | v0.1 | **Prompt Handoff for Agent Session Evolution** — plan-driven brain configuration and cascading refinement across phases |
 | **[ATLAS](./atlas/)** | v0.1 | **Architecture Truth Layered Across Stacks** — living system maps with frontmatter standards and hierarchy |
 | **[Breath Cycle](./breath-cycle/)** | v0.2 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design constraint |
 | **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
@@ -44,12 +46,21 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 │  AMPS                → what do I remember?        │
 │                        (Skills, Muscles,          │
 │                         Protocols, Automations)   │
+│  MAPS                → how do I navigate?         │
+│  PHASE               → how do I evolve?           │
 │  ATLAS               → what does this system      │
 │                        look like?                 │
 └──────────────────────────────────────────────────┘
 ```
 
-An agent boots, discovers its **identity**, **inhales** (loads preload + AMPS content via **AMP**), reads the **ATLAS** state, and works — skills load on demand, muscles apply from experience, protocols enforce rules, automations execute workflows. Then it **exhales** (writes preload, commits checkpoints) when context fills up. The cycle repeats. Over time, muscles strengthen, patterns crystallize into protocols and automations, and the agent gets better — not just within a session, but across sessions.
+The protocol family shares DNA — the same letters recombining at each layer:
+
+```
+AMP  → AMPS → MAPS → PHASE
+store   define  navigate  orchestrate
+```
+
+An agent boots, discovers its **identity**, **inhales** (loads preload + AMPS content via **AMP**), checks for a **MAP** (task-specific navigation), applies **PHASE** config (brain tuned for the task), reads the **ATLAS** state, and works. Skills load on demand, muscles apply from experience, protocols enforce rules, automations execute workflows. Then it **exhales** (writes preload, commits checkpoints, refines the next phase's MAP) when context fills up. The cycle repeats. Over time, muscles strengthen, patterns crystallize into protocols and automations, and each phase's agent configures the next — not just within a session, but across sessions and across agents.
 
 ## The Core Idea
 
