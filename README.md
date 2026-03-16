@@ -60,7 +60,7 @@ AMP  → AMPS → MAPS → PHASE
 store   define  navigate  orchestrate
 ```
 
-An agent boots, discovers its **identity**, **inhales** (loads preload + AMPS content via **AMP**), checks for a **MAP** (task-specific navigation), applies **PHASE** config (brain tuned for the task), reads the **ATLAS** state, and works. Skills load on demand, muscles apply from experience, protocols enforce rules, automations execute workflows. Then it **exhales** (writes preload, commits checkpoints, refines the next phase's MAP) when context fills up. The cycle repeats. Over time, muscles strengthen, patterns crystallize into protocols and automations, and each phase's agent configures the next — not just within a session, but across sessions and across agents.
+Before an agent boots, **PHASE** assembles its brain — loading the assigned identity, relevant **AMPS** content, and **MAP** navigation into a system prompt architected for that specific task. The agent then boots already shaped for the work, reads the **ATLAS** state, and executes its MAP. Then it **exhales** — writes preload, commits checkpoints, and refines the next phase's configuration. Each completing agent shapes the next. Over time, the system gets smarter — not just within a session, but across sessions and across agents.
 
 ## The Core Idea
 
