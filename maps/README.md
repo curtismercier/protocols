@@ -17,7 +17,7 @@ extends: amps/1.0
 
 ## 1. The Problem
 
-AMPS gives an agent the raw materials — automations, muscles, protocols, skills. But materials without a plan produce inconsistent results. One session the agent remembers to run the tests. Next session it forgets. One session it checks the docs. Next session it skips that and ships drift.
+AMPS gives an agent the raw materials — automations, muscles, protocols, scripts. But materials without a plan produce inconsistent results. One session the agent remembers to run the tests. Next session it forgets. One session it checks the docs. Next session it skips that and ships drift.
 
 This happens because AMPS content is **loaded by heat, not by task**. Heat reflects what's been used recently. But what's been used recently isn't necessarily what's needed *right now*. A refactoring session needs `incremental-refactor` hot — but if the agent spent the last three sessions writing blog posts, that muscle is cold.
 
