@@ -1,9 +1,9 @@
 ---
 type: spec
 status: draft
-version: 0.1.0
+version: 0.2.0
 created: 2026-03-10
-updated: 2026-03-10
+updated: 2026-03-28
 author: Curtis Mercier
 license: CC BY 4.0
 ---
@@ -29,7 +29,7 @@ ATLAS solves this by making the architecture doc the **primary reference** — t
 4. **Hierarchical.** Parent ATLAS wins on cross-cutting concerns. Child wins on local details.
 5. **Machine-readable frontmatter.** Every doc has standard metadata for searchability.
 
-## 3. Frontmatter Standard
+## 3. Frontmatter
 
 Every ATLAS-participating document MUST have:
 
@@ -42,24 +42,29 @@ updated: <YYYY-MM-DD>
 ---
 ```
 
-### 3.1 Type Values
+### 3.1 Required Fields
+
+| Field | Purpose |
+|-------|---------|
+| `type` | What kind of document (see §3.2) |
+| `status` | Lifecycle state (see §3.3) |
+| `created` | When first written |
+| `updated` | When last meaningfully changed |
+
+### 3.2 Core Type Values
 
 | Value | Meaning |
 |-------|---------|
 | `state` | ATLAS architecture truth doc (STATE.md) |
 | `plan` | Something intended to be built/done |
 | `spec` | A specification or standard |
-| `muscle` | A learned pattern (see AMP spec) |
-| `preload` | Session continuation state (see AMP spec) |
-| `identity` | Agent identity definition |
 | `note` | General reference document |
 | `index` | Directory listing / navigation |
-| `concept` | Early-stage idea exploration |
-| `ritual` | Workflow definition |
-| `strategy` | Business, IP, or technical strategy |
 | `log` | Chronological record |
 
-### 3.2 Status Lifecycle
+Implementations MAY extend this list. The [AMPS](../amps/) protocol adds `muscle`, `protocol`, `map`, and others. ATLAS does not prescribe the full taxonomy — it prescribes the mechanism.
+
+### 3.3 Status Lifecycle
 
 ```
 seed → draft → active → complete
@@ -79,23 +84,22 @@ seed → draft → active → complete
 | `paused` | Intentionally stopped, will resume |
 
 **Rules:**
-- `state` (ATLAS) docs should always be `active`. If stale, something's wrong.
+- `state` docs should always be `active`. If stale, something's wrong.
 - `plan` docs move: `seed → draft → active → complete`
-- `muscle` docs are always `active` or `archived`
 - `updated` changes with every meaningful content edit
 
-### 3.3 Optional Fields
+### 3.4 Optional Fields
 
 ```yaml
 tags: [<searchable keywords>]
 project: <project name>
 author: <who wrote it>
 depends: [<what blocks this>]
-blocks: [<what this blocks>]
-priority: <high|medium|low>
-reviewed: <YYYY-MM-DD>
+rule: <when to update this file>
 scope: <local|shared>
 ```
+
+See the reference implementation's frontmatter standard for a complete taxonomy of optional fields suited to agent memory systems.
 
 ## 4. The STATE.md File
 
@@ -136,7 +140,7 @@ rule: <when to update this file>
 |----------|------|-----------|
 
 ## Open Questions
-- 
+-
 ```
 
 ### 4.3 The `rule` Field
@@ -149,7 +153,7 @@ rule: Update when repos, infrastructure, or cross-repo relationships change.
 rule: Update when components are added, removed, or their relationships change.
 ```
 
-This makes the update discipline explicit and self-documenting.
+This makes the update discipline explicit and self-documenting. Every agent that reads the file knows what events should trigger an update — without needing external documentation.
 
 ## 5. Hierarchy
 
@@ -193,20 +197,81 @@ If `component/STATE.md` said "we use npm" — that conflicts with the ecosystem-
 - Secrets or credentials (vault, .env)
 - Aspirational features not yet built (those are plans, not state)
 
-### 6.3 The `updated` Discipline
+### 6.3 Staleness Signals
 
-> Update `updated:` in the same edit as any meaningful content change.
+The `updated` field is a staleness indicator. Implementations SHOULD define thresholds:
 
-"Meaningful" = content changed in a way that affects understanding. Not typo fixes or reformatting.
+| Age | Signal | Recommended action |
+|-----|--------|-------------------|
+| ≤3 days | Fresh | No action needed |
+| 3–7 days | Warning | Verify before starting cross-scope work |
+| >7 days | Stale | Full ATLAS audit before trusting content |
 
-## 7. Searchability
+These thresholds are guidelines, not rules — a stable system may go weeks without architectural changes. The signal is the gap between `updated` and the last structural change, not `updated` and today.
+
+Automation helps: build tools that warn when `updated` exceeds the threshold. The discipline decays without reminders.
+
+### 6.4 Verification
+
+After a structural change, verify the STATE.md matches reality:
+
+**After a component change:**
+- Component table matches the actual filesystem
+- Relationships in the system map are current
+- Status column reflects actual state
+
+**After a release or deployment:**
+- Version numbers match `package.json` / build output
+- Deployment paths match actual infrastructure
+
+**Quick check (any scope):**
+```bash
+grep "^updated:" STATE.md      # Is the date recent?
+grep "^status:" STATE.md       # Is it still active?
+```
+
+Implementations MAY add scope-specific checklists (e.g., "verify branch list matches `git branch -a`"). The principle is: **the doc claims to be truth — verify the claim**.
+
+## 7. Inline Maintenance Markers
+
+STATE.md sections that track volatile state (branch lists, version numbers, component tables) benefit from inline markers that tell the reader when to update that specific section:
+
+```html
+## Components
+<!-- UPDATE WHEN: components added, removed, or status changes -->
+<!-- VERIFY: compare table to actual filesystem -->
+```
+
+These markers serve a different purpose than frontmatter — they're contextual (per-section) rather than per-document, and actionable (tell you HOW to verify, not just THAT you should).
+
+The `UPDATE WHEN` marker defines the trigger. The `VERIFY` marker defines the check. Together they make maintenance instructions local to the content they describe.
+
+In multi-agent systems, a `WHO UPDATES` marker can assign responsibility:
+
+```html
+<!-- WHO UPDATES: any agent after structural changes. Verify with: ls src/ -->
+```
+
+This is especially valuable when multiple agents maintain the same STATE.md — without it, every agent assumes someone else will update.
+
+## 8. Companion Documents
+
+A STATE.md that tries to be comprehensive becomes too large for quick orientation. A STATE.md that's too brief doesn't orient effectively. The two-document pattern solves this:
+
+| Document | Role | Size | Loading |
+|----------|------|------|---------|
+| **STATE.md** | Health snapshot — branches, versions, known issues, quick verify | Small (<50 lines) | Always loaded (eager) |
+| **Companion index** | Full inventory — file map, architecture diagram, data flow, known issues detail | Large (100–200 lines) | Loaded on demand (lazy) |
+
+STATE.md is the dashboard. The companion index is the manual. Both follow ATLAS principles (frontmatter, update discipline, hierarchy). The companion references the STATE.md and vice versa.
+
+This pattern is optional — small scopes may only need STATE.md. Introduce the companion when the STATE.md grows past ~50 lines or when a codebase index would save repeated exploration.
+
+## 9. Searchability
 
 With standard frontmatter, finding things is grep:
 
 ```bash
-# All unfinished plans
-grep -rl "^status: draft" .
-
 # All architecture docs
 grep -rl "^type: state" .
 
@@ -214,7 +279,7 @@ grep -rl "^type: state" .
 grep -rl "^status: stale" .
 
 # All docs updated in the last week
-grep -rl "^updated: 2026-03-1" .
+grep -rl "^updated: 2026-03-2" .
 
 # High-priority items
 grep -rl "^priority: high" .
@@ -222,15 +287,51 @@ grep -rl "^priority: high" .
 
 For agents: scan frontmatter at boot to know what's in progress, what's blocked, what's stale. The frontmatter IS the project management layer.
 
-## 8. Implementation Notes
+## 10. For Implementors
 
-- ATLAS works with any documentation format that supports frontmatter (Markdown + YAML is the default)
-- No tooling required — it's a discipline, not a dependency
-- Agents that implement ATLAS should read STATE.md on boot to orient — after identity and [PHASE](../phase/) configuration, before starting work
-- The frontmatter standard is shared with the AMP protocol (muscles, preloads use the same fields)
-- In multi-phase work ([MAPS](../maps/)), each phase may reference different ATLAS docs depending on scope
+### Introducing ATLAS to an Existing Project
 
-## 9. Attribution
+1. Create `STATE.md` in the project root
+2. Write the system map (ASCII art — doesn't need to be perfect)
+3. List components with status
+4. Set the `rule:` field (what triggers updates)
+5. Set `updated:` to today
+6. Read it on every session start — this is how the habit forms
+
+### First ATLAS Audit
+
+When adopting ATLAS on a project with existing docs:
+1. Create STATE.md as described above
+2. Read existing docs and note what's stale
+3. Move architectural claims from README/docs into STATE.md
+4. Mark the old docs with notes pointing to STATE.md
+5. Delete architectural claims that are duplicated (don't maintain two truths)
+
+### Multi-Agent Systems
+
+When multiple agents work on the same system:
+- Each agent reads STATE.md on boot
+- Each agent updates STATE.md when it makes structural changes
+- Inline maintenance markers (`UPDATE WHEN`, `WHO UPDATES`) prevent "someone else will do it" drift
+- The hierarchy resolves conflicts — parent scope wins cross-cutting
+
+### Automation
+
+ATLAS is a discipline, not a dependency — no tooling required. But discipline decays:
+- Build scripts can warn when `updated` exceeds staleness thresholds
+- CI can check that structural changes include STATE.md edits
+- Agents can verify STATE.md on session start (pre-flight check)
+
+## 11. Relationship to Other Protocols
+
+- **[AMP](../amp/)** — ATLAS uses AMP's frontmatter convention. STATE.md is a first-class AMP document type.
+- **[AMPS](../amps/)** — ATLAS documents may describe the AMPS content loaded per scope.
+- **[MAPS](../maps/)** — Each MAP phase may reference different ATLAS docs depending on scope.
+- **[PHASE](../phase/)** — When a PHASE configures an agent, it should load the scope-appropriate STATE.md.
+- **[SEAMS](../seams/)** — STATE.md updates should carry session seams for traceability. Inline maintenance markers complement session seams with structural navigation.
+- **[SEEDS](../seeds/)** — A `_STATE.md` seed template scaffolds new scopes with the ATLAS structure.
+
+## 12. Attribution
 
 ```
 This project uses the ATLAS method
@@ -240,5 +341,20 @@ Licensed under CC BY 4.0
 
 ---
 
-*ATLAS v0.1 — Curtis Mercier — CC BY 4.0*
+*ATLAS v0.2 — Curtis Mercier — CC BY 4.0*
 *Reference implementation: Soma (soma.gravicity.ai)*
+
+### Changelog
+
+**v0.2.0** (2026-03-28)
+- Added §6.3 Staleness Signals — thresholds for when to verify vs when to audit
+- Added §6.4 Verification — post-change checklists and quick checks
+- Added §7 Inline Maintenance Markers — per-section `UPDATE WHEN`, `VERIFY`, `WHO UPDATES`
+- Added §8 Companion Documents — two-file pattern (STATE.md + companion index)
+- Added §10 For Implementors — concrete guidance on adoption, first audit, multi-agent, automation
+- Revised §3 Frontmatter — trimmed to core fields, implementations extend the taxonomy
+- Revised §11 Relationship to Other Protocols — expanded with specific connection points
+- Principles, hierarchy, and core template unchanged
+
+**v0.1.0** (2026-03-10)
+- Initial specification

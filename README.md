@@ -27,9 +27,9 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 | **[AMPS](./amps/)** | v1.0 | **Agent Memory Protocol Stack** — four content types that extend AMP: Automations, Muscles, Protocols, Skills |
 | **[MAPS](./maps/)** | v0.1 | **My Automation Protocol Scripts** — navigation layer over AMPS. Task-specific paths through knowledge, with progressive phase chains |
 | **[PHASE](./phase/)** | v0.1 | **Prompt Handoff for Agent Session Evolution** — plan-driven brain configuration and cascading refinement across phases |
-| **[SEAMS](./seams/)** | v0.1 | **Session Evolution Archival for Memory Systems** — traceable connections between every artifact. Pull any seam and the whole chain follows |
-| **[SEEDS](./seeds/)** | v0.1 | **Self-Evolving Experience Discovery Structure** — templates that grow structure. Drop a seed in any folder and it tells the agent how to grow |
-| **[ATLAS](./atlas/)** | v0.1 | **Architecture Truth Layered Across Stacks** — living system maps with frontmatter standards and hierarchy |
+| **[SEAMS](./seams/)** | v0.2 | **Session Evolution Archival for Memory Systems** — traceable connections between every artifact. Session seams trace time, document seams trace space. Pull any seam and the whole chain follows |
+| **[SEEDS](./seeds/)** | v0.2 | **Self-Evolving Experience Discovery Structure** — templates that grow structure with origin provenance and typed scaffolding. Drop a seed in any folder and it tells the agent how to grow |
+| **[ATLAS](./atlas/)** | v0.2 | **Architecture Truth Layered Across Stacks** — living system maps with staleness signals, inline maintenance markers, and companion documents |
 | **[Breath Cycle](./breath-cycle/)** | v0.2 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design constraint |
 | **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
 | **[Git Identity](./git-identity/)** | v0.2 | **Multi-repo attribution** — identity zones, path-based resolution, agent vs human commits |
