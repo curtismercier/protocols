@@ -364,7 +364,7 @@ A `_phase.md` seed could include a `## MAP Template` section — the default MAP
 ```
   A M P S
       H
-  M A P S
+    M A P S
       S E A M S
   S E E D S    ← you are here
 ```

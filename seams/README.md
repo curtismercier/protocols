@@ -290,7 +290,7 @@ This is the structural equivalent of `trace hash` — instead of walking time, i
 ```
   A M P S
       H
-  M A P S
+    M A P S
       S E A M S  ← you are here
   S E E D S
 ```
