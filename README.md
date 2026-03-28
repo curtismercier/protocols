@@ -26,7 +26,7 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 | **[AMP](./amp/)** | v0.3 | **Agent Memory Protocol** — filesystem-based persistent memory with heat tracking, checkpoints, flush pipeline, and pattern evolution |
 | **[AMPS](./amps/)** | v1.0 | **Agent Memory Protocol Stack** — four content types that extend AMP: Automations, Muscles, Protocols, Skills |
 | **[MAPS](./maps/)** | v0.1 | **My Automation Protocol Scripts** — navigation layer over AMPS. Task-specific paths through knowledge, with progressive phase chains |
-| **[PHASE](./phase/)** | v0.1 | **Prompt Handoff for Agent Session Evolution** — plan-driven brain configuration and cascading refinement across phases |
+| **[PHASE](./phase/)** | v0.2 | **Prompt Handoff for Agent Session Evolution** — plan-driven brain configuration via prompt config or self-contained phase folders, with cascading refinement and autonomous execution |
 | **[SEAMS](./seams/)** | v0.2 | **Session Evolution Archival for Memory Systems** — traceable connections between every artifact. Session seams trace time, document seams trace space. Pull any seam and the whole chain follows |
 | **[SEEDS](./seeds/)** | v0.2 | **Self-Evolving Experience Discovery Structure** — templates that grow structure with origin provenance and typed scaffolding. Drop a seed in any folder and it tells the agent how to grow |
 | **[ATLAS](./atlas/)** | v0.2 | **Architecture Truth Layered Across Stacks** — living system maps with staleness signals, inline maintenance markers, and companion documents |
