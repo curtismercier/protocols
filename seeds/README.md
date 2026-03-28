@@ -366,7 +366,7 @@ A `_phase.md` seed could include a `## MAP Template` section — the default MAP
       H
   M A P S
       S E A M S
-    S E E D S    ← you are here
+  S E E D S    ← you are here
 ```
 
 - **AMP** stores the files. SEEDS creates new files from templates within the AMP filesystem.

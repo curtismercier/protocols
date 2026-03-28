@@ -47,7 +47,7 @@ The protocol family shares DNA — the same letters recombining. They don't just
       H
   M A P S           ← how do I navigate?     (task paths)
       S E A M S     ← how do I trace?        (connections)
-    S E E D S       ← how do I grow?         (templates)
+  S E E D S         ← how do I grow?         (templates)
       ↑
     PHASE            ← how am I configured?
 ```

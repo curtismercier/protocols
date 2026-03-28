@@ -292,7 +292,7 @@ This is the structural equivalent of `trace hash` — instead of walking time, i
       H
   M A P S
       S E A M S  ← you are here
-    S E E D S
+  S E E D S
 ```
 
 - **AMP** stores the files. SEAMS adds origin metadata to those files.
