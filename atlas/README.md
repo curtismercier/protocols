@@ -332,7 +332,32 @@ ATLAS is a discipline, not a dependency — no tooling required. But discipline 
 - **[SEAMS](../seams/)** — STATE.md updates should carry session seams for traceability. Inline maintenance markers complement session seams with structural navigation.
 - **[SEEDS](../seeds/)** — A `_STATE.md` seed template scaffolds new scopes with the ATLAS structure.
 
-## 12. Attribution
+## 12. Anti-Patterns
+
+- **STATE.md as afterthought.** When STATE.md is written *after* the architecture decisions, it lies by omission. Write the STATE.md update as the same commit that ships the architecture change.
+- **STATE.md that nobody reads.** If the agent boots and skips STATE.md, the file rots. Boot disciplines (preload, body.md) must reference STATE.md as orient material.
+- **Inline maintenance markers without enforcement.** `<!-- @stale -->` and similar markers depend on someone (or something) noticing them. Without an audit script that flags stale markers, they become invisible.
+- **One STATE.md for the whole project.** Large projects need a hierarchy — project, service, component. A single 2,000-line STATE.md is unmaintainable.
+- **Companion docs that drift from STATE.md.** When `STATE.md` and `runbook.md` and `traps.md` claim contradictory facts, STATE.md should win (it's the primary source). Audit scripts MUST flag cross-doc contradictions.
+- **STATE.md written for humans only.** The agent reads STATE.md too. If it can't extract the deployment topology because the prose is too narrative, the doc fails one of its audiences.
+
+## 13. Conformance
+
+An ATLAS-conformant implementation MUST:
+
+1. **Produce a STATE.md at every meaningful scope** — project, service, component. The hierarchy is declared (§5).
+2. **Update STATE.md in the same commit as the architecture change** — not as a follow-up. The update IS the architecture change.
+3. **Honor `<!-- @stale -->` and similar inline maintenance markers** — markers exist to flag content that needs attention; audit tooling MUST surface them.
+4. **Distinguish STATE.md (primary) from companion docs** — runbooks, troubleshooting, traps are derived from or complementary to STATE; conflicts resolve to STATE.
+5. **Make STATE.md machine-readable and human-readable** — frontmatter for facts the agent needs to extract; prose for nuance; both audiences served.
+
+A conformant tooling layer SHOULD provide:
+
+- `atlas:audit` — detect stale markers, broken inline references, contradictions between STATE.md and companion docs
+- `atlas:hierarchy` — walk the STATE hierarchy from current scope upward
+- `atlas:diff <commit>` — show STATE.md changes against a baseline (catches "shipped an arch change without updating STATE")
+
+## 14. Attribution
 
 ```
 This project uses the ATLAS method

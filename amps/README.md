@@ -386,7 +386,35 @@ AMPS content is distributed via the **Soma Hub** (or any compatible registry). T
 
 `core ⊂ official` — all core content is also official.
 
-## 9. Attribution
+## 9. Anti-Patterns
+
+- **Confusing content types.** AMPS' four content types (Automations, Muscles, Protocols, Scripts) are distinct by **authorship, lifecycle, and purpose** — not by syntax. A 100-line shell file is a Script. A 100-line Markdown file describing *when and how* to use that script is a Muscle. Conflating them collapses the type system.
+- **Inlining content across types.** When a Muscle includes the full body of a Script instead of referencing it by name, the two copies drift. References by name; content lives in one place.
+- **Heat tracking on Protocols.** Protocols are always-on behavior; they don't have heat. Heat applies to Muscles (which load progressively). Tracking heat on Protocols breaks the loading discipline.
+- **Skill conflation (pre-v1.1 hangover).** The pre-v1.1 spec called the S in AMPS "Skills." v1.1 renamed to "Scripts" to avoid conflict with the Agent Skills standard. Documentation or tooling still using "Skills" for the S slot needs an update.
+- **Per-project AMPS only.** AMPS content belongs at the appropriate scope. A muscle that applies to *every* project lives at `~/.soma/amps/muscles/`. A protocol specific to *one* tenant lives in that tenant's `.soma/`. Putting everything in `<project>/.soma/` defeats the inheritance.
+- **Versioning content without versioning the contract.** When a muscle changes shape (new required field, new front-of-prompt directive), bumping the contract (AMPS version) is the right move. Silently shifting muscle shape mid-cycle breaks heat-tracking and loader assumptions.
+- **Treating Automations as cron jobs.** Automations are agent-triggered, condition-based actions; they're not arbitrary scheduled tasks. Putting cron entries in `automations/` confuses the type system.
+
+## 10. Conformance
+
+An AMPS-conformant implementation MUST:
+
+1. **Recognize the four content types** — `automations/`, `muscles/`, `protocols/`, `scripts/`. Tooling MAY support additional types but the four are the contract.
+2. **Load Protocols always-on** — every protocol in scope (per walk-up) loads at boot.
+3. **Load Muscles progressively** — muscles load based on heat, force-include, or explicit `/pin`. Not all muscles load every session.
+4. **Treat Scripts as executable resources** — referenced by name from muscles/maps/automations, not inlined.
+5. **Honor `depends-on:` declarations** — when a muscle declares a dependency on a script or protocol, the runtime ensures the dependency is available.
+6. **Apply v1.1 naming** — the S is Scripts, not Skills. Skills are the Agent Skills standard, separately discoverable.
+
+A conformant tooling layer SHOULD provide:
+
+- Per-type loaders + lifecycle hooks (e.g. Muscle heat decay)
+- Dependency resolution at boot (`depends-on:` graph walk)
+- AMPS validation: required frontmatter per type, no inlined cross-type content, dependency cycles flagged
+- Hub distribution + composition (§6-7)
+
+## 11. Attribution
 
 ```
 This project uses AMPS (Agent Memory Protocol Stack)

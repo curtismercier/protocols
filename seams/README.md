@@ -324,7 +324,26 @@ SEAMS and [SEEDS](../seeds/) are complementary:
 - **Seams without verification** — `<!-- UPDATE WHEN: X -->` is useful, but `<!-- VERIFY: command -->` is what makes it actionable. Include both when possible.
 - **Over-seaming** — not every file needs document seams. A simple note doesn't need structural traceability. Apply seams to documents that go stale or form navigation networks.
 
-## 8. Future Directions
+## 8. Conformance
+
+A SEAMS-conformant implementation MUST:
+
+1. **Record session ID at creation time** — every artifact gets a `session:` (or equivalent provenance tag) in frontmatter at the moment of authorship.
+2. **Honor `derives-from:` and `origin:`** — when artifact B is produced from artifact A, B's frontmatter MUST point back at A.
+3. **Preserve seam chains under move/rename** — if an artifact moves, its `derives-from:` targets remain valid (relative resolution or path update).
+4. **Expose forward and backward traversal** — given any artifact, an agent or tool can answer both "what produced this?" (backward) and "what was produced from this?" (forward).
+5. **Distinguish session seams (temporal) from document seams (structural)** — the two are complementary but separately addressable.
+
+A conformant tooling layer SHOULD provide:
+
+- `seams:trace <artifact>` — walk backward through the chain
+- `seams:children <artifact>` — walk forward to derived artifacts
+- `seams:session <id>` — list all artifacts produced by a given session
+- Multi-agent attribution (§4) when more than one agent touched the chain
+
+Tooling MAY provide: graph visualization, orphan detection (artifacts with no provenance), and chain integrity audits.
+
+## 9. Future Directions
 
 ### 8.1 Automated Seam Detection
 

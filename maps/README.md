@@ -180,7 +180,24 @@ Living list of what's missing or broken.
 - **MAP for a one-time task** — overkill. MAPS are for recurring processes.
 - **Fully detailed Phase 3 MAP from Phase 0** — over-planning. Later phases get refined by earlier completions.
 
-## 8. Relationship to PHASE
+## 8. Conformance
+
+A MAPS-conformant implementation MUST:
+
+1. **Honor `triggers:` frontmatter** — surface a MAP when a task description matches a declared trigger keyword.
+2. **Reference AMPS content by name** — a MAP's steps point at muscles, protocols, scripts, automations by name; no inlined content.
+3. **Preserve `## Gaps`** — a `Gaps` section MUST be reachable in the MAP (empty or populated). Gaps are how the MAP gets smarter.
+4. **Resolve phase chains in declared order** — when `next:` or chained phases are declared, execute them in that order (§4).
+5. **Apply `prompt-config:` before agent boot** — if the MAP carries PHASE configuration, it MUST be honored at session start (delegates to PHASE conformance).
+
+A conformant tooling layer SHOULD provide:
+
+- `maps:trigger <task>` — list MAPS whose triggers match the task description
+- `maps:next` — advance to the next phase declared by the current MAP
+- `maps:gaps` — surface all gaps across the project's MAPS, sorted by last touched
+- MAP validation: required H2s, trigger uniqueness, broken AMPS-content references
+
+## 9. Relationship to PHASE
 
 MAPS provide the navigation. [PHASE](../phase/) provides the agent configuration. Together:
 

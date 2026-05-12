@@ -385,7 +385,24 @@ A `_phase.md` seed could include a `## MAP Template` section — the default MAP
 - **Missing origin fields** — every scaffolded file MUST carry `origin:` in canonical session hash format. If `origin` is missing or has drifted to prose, the traceability chain is broken.
 - **Missing seeded-from** — without `seeded-from:`, you can't trace which template created a file. When a template evolves, you can't identify which files need upgrading.
 
-## 11. Future Directions
+## 11. Conformance
+
+A SEEDS-conformant implementation MUST:
+
+1. **Recognize `_template` directories** — a directory or file prefixed with `_template` is a seed. The runtime MUST NOT interpret it as runtime content; it MUST be available for scaffolding.
+2. **Substitute template variables** — `${var}` placeholders MUST resolve from the scaffolding context (current MAP, session, project metadata).
+3. **Preserve `origin:` provenance** — every scaffolded file carries an `origin:` frontmatter field naming the seed it came from. Provenance is non-optional (§4).
+4. **Honor `inherits-from:`** — when a seed declares inheritance, the runtime resolves the parent seed and applies overrides per the cascade rules (§5).
+5. **Support seed evolution** — when a scaffolded artifact's structure is updated upstream in the seed, the runtime MUST detect drift (compare against `origin:`) and either auto-update or surface a diff for the agent.
+
+A conformant tooling layer SHOULD provide:
+
+- `seeds:scaffold <seed> [target]` — instantiate a seed at target location
+- `seeds:diff <artifact>` — show drift between artifact and its origin seed
+- `seeds:rebase <artifact>` — apply upstream seed changes to existing artifacts (interactive merge for conflicts)
+- Seed validation: required template variables resolved, inheritance chain non-cyclic
+
+## 12. Future Directions
 
 ### 11.1 Seed Marketplace
 

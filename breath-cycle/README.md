@@ -147,7 +147,33 @@ The metaphor isn't decoration. It shapes design decisions:
 - The flush threshold should be tuned to the model and use case
 - Auto-continuation requires framework support (session management, programmatic restart)
 
-## 7. Attribution
+## 7. Anti-Patterns
+
+- **"Just one more thing" past the exhale.** When the breath signals exhale, the discipline is to actually exhale — write the preload, flush state, close cleanly. Pushing past exhale because the work feels almost-done is how preloads get rushed and continuity breaks.
+- **No preload written at exhale.** The preload IS the breath cycle's output. A session that ends without one didn't actually exhale — it just ran out of air.
+- **Treating context window as a resource to maximize.** The window is a breath, not a budget. Maximizing fills produces brittle sessions; rhythm produces durable ones.
+- **Inhaling everything at boot.** The preload tells you WHAT happened, not the full history. Read it, then reach for specific files as the work demands. Pre-loading the universe defeats the design.
+- **Skipping MLX during exhale.** MLX is the audit pass that catches what's still floating before the breath releases (see MLX spec). Exhaling without MLX leaves orphan lessons.
+- **Forcing a continuation when the natural break is here.** A breath that should have ended at exhale but kept going because the work felt unfinished produces lower-quality continuations than a clean rest-and-resume.
+
+## 8. Conformance
+
+A Breath-Cycle-conformant implementation MUST:
+
+1. **Distinguish the four phases** — inhale (boot), process (work), exhale (flush), rest (between sessions). Each phase has different obligations.
+2. **Trigger exhale at context-window thresholds** — implementations choose the threshold; the protocol requires that exhale fires before context-window exhaustion forces a hard cut.
+3. **Produce a preload at exhale** — the preload-out artifact is mandatory; resume points, what shipped, and read-first targets MUST be present.
+4. **Consume a preload at inhale** — the next session boot reads the previous exhale's preload before any other context.
+5. **Honor cross-session continuity** — identity, body, journal, soul carry forward across breaths. They are not session-scoped.
+
+A conformant tooling layer SHOULD provide:
+
+- `breathe` — trigger an exhale at the agent's request or at threshold detection
+- `rest` — close the current session cleanly
+- `inhale` — next-session boot that reads the previous preload first
+- Context-window monitoring + threshold alerts (50% / 70% / 85% common values)
+
+## 9. Attribution
 
 ```
 This project implements the Breath Cycle

@@ -245,7 +245,36 @@ Any AI agent framework that can read and write files can implement AMP. The prot
 [Soma](https://soma.gravicity.ai) — open source.
 GitHub: [github.com/meetsoma](https://github.com/meetsoma)
 
-## 12. Attribution
+## 12. Anti-Patterns
+
+- **Reaching for a vector DB.** AMP exists because filesystems already work. If the design instinct is to add embeddings or a vector store "for retrieval," the agent is forgetting it already has read/write tools and a hierarchical filesystem.
+- **"Filed in my head."** The most common AMP failure isn't structural — it's verbal. When an agent says "I'll remember this," the lesson is not on disk and will not survive the next session. The phrase itself is the tell. (Reinforced in MLX §2.3.)
+- **Body files that grow unbounded.** Body discipline matters: under ~3KB for the dispatcher; lazy-load detailed surfaces. A 50KB body.md is a cache-warming tax on every session.
+- **Preload as continuation summary.** Preloads are briefings for next-self, not transcripts of last-self. "Continued working on X" is useless; "X is at commit `<sha>`; resume by reading `<path>` line N" is the contract.
+- **Heat tracking decay without write-back.** If muscle heat decays in-memory but never persists to disk, the agent forgets what was hot last session.
+- **Project-local memory only.** AMP's power comes from the walk-up chain (project → parent → user). Putting everything in `<project>/.soma/` and nothing in `~/.soma/` forfeits cross-project memory.
+- **Memory edits without provenance.** When the agent edits a body file or muscle, the edit should carry a SEAMS-style origin marker. Anonymous edits are unrecoverable when something goes wrong.
+
+## 13. Conformance
+
+An AMP-conformant implementation MUST:
+
+1. **Use filesystem as the primary store** — no external database for memory operations. Files are the substrate.
+2. **Walk the directory chain at boot** — project → parent → user (`<cwd>/.soma/` → ancestors → `~/.soma/`). Each level contributes.
+3. **Produce a preload at exhale** — the preload-out artifact is the cross-session contract. Required fields: resume point, what shipped, read-first targets.
+4. **Honor heat tracking and persistence** — if the implementation tracks heat (recency, frequency), it MUST persist heat values across sessions in `state.json` or equivalent.
+5. **Support checkpoints** — the agent can save and restore state at arbitrary points within a session.
+6. **Make memory inspectable and editable by both agent and human** — every memory file is plain Markdown or simple data; no binary stores.
+
+A conformant tooling layer SHOULD provide:
+
+- Preload assembly + parsing at session boundaries
+- Heat tracking with configurable decay
+- Body-file slot inspection (sizes, byte costs)
+- Walk-up discovery utilities ("which body files apply at this CWD?")
+- MLX integration at exhale (§5 of Breath Cycle)
+
+## 14. Attribution
 
 ```
 This project implements the Agent Memory Protocol (AMP)

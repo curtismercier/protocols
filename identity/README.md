@@ -126,7 +126,32 @@ This isn't personification for its own sake. Identity serves engineering goals:
 - Identity affects muscle loading: the agent should prefer muscles that match its current identity's domain
 - Identity files should be version-controlled (they're project config, not secrets)
 
-## 8. Attribution
+## 8. Anti-Patterns
+
+- **Global identity for every project.** Custom instructions that don't change between web work, Python work, and devops work waste the context-aware layer. Identity exists to differ by where you are.
+- **Identity file with no specific tools / vocabulary.** A `soul.md` that says "be helpful, be careful, ask questions" is generic. The identity layer is where the agent learns *this project's* tools, conventions, and vocabulary.
+- **Confusing identity with body.** Identity is the WHO. Body is the WHERE. "You are a senior backend engineer" is identity. "This project uses pnpm, atom for deploys, BSL-1.1" is body. Mixing them produces stale identities.
+- **Identity that never updates.** Same trap as stale custom instructions — the agent grew, the identity didn't. Identity files SHOULD evolve through use (see SEEDS evolution patterns).
+- **Identity inheritance gone wrong.** When parent + child identities both declare the same field, the cascade resolution must be explicit. Implicit precedence breeds drift.
+- **Treating identity as costume.** "You are now a pirate" is play, not identity. Real identity is contextual self-knowledge — what tools the agent has here, what conventions apply, what voice fits this project.
+
+## 9. Conformance
+
+An Identity-System-conformant implementation MUST:
+
+1. **Discover identity by location** — the agent's CWD plus its walk-up chain determines which identity file(s) apply. No global override.
+2. **Honor inheritance** — child identities override parent fields explicitly; the cascade order is parent → child, with child winning.
+3. **Compose into the system prompt at boot** — identity content joins the system prompt before any tools/skills load, so the agent's first orienting move uses the right identity.
+4. **Distinguish identity from body and soul** — identity is contextual self (where am I, what am I doing); body is project working memory (what's here); soul is cross-session essence (who I am over time).
+5. **Persist identity edits** — the agent or user MAY edit identity files; the runtime MUST honor edits without requiring restart.
+
+A conformant tooling layer SHOULD provide:
+
+- Identity-file scaffolding (per SEEDS) for new projects
+- Inheritance graph inspection ("show me which identity files apply here and in what order")
+- Identity diffs (when does my identity change as I `cd` between projects?)
+
+## 10. Attribution
 
 ```
 This project uses the Agent Identity System

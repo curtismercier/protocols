@@ -644,7 +644,26 @@ PHASE is the vertical spine of the protocol family. Everything crosses through i
 - **Phase folders for single-session tasks** — overhead without benefit. Use prompt config for quick overrides. Graduate to folders when the task spans sessions.
 - **Isolated phase folders** — a phase folder that doesn't write `preload-out.md` or update project state breaks the chain. The handoff is not optional.
 
-## 15. Adoption Path
+## 15. Conformance
+
+A PHASE v0.3-conformant implementation MUST:
+
+1. **Honor `prompt-config:` frontmatter** — when a MAP carries a prompt-config block, apply heat overrides, force-include/exclude, and identity layers before agent boot (T1).
+2. **Recognize phase folder shape** — a directory containing `README.md` with `type: phase` frontmatter is a phase folder (T2 minimum).
+3. **Provide preload-in / preload-out handoff** — phase N+1 reads phase N's `preload-out.md` (or symlink-equivalent) before executing.
+4. **Record provenance in phase frontmatter** — `session_origin`, `created`, `updated`, and `status` lifecycle values (queued|active|shipped|parked|superseded).
+5. **Run all four moves of the meta-orchestration cycle** — DO, WATCH, DECIDE, CLOSE — every loop. Skipping WATCH or DECIDE is non-conformant (§9.1).
+
+A conformant tooling layer SHOULD provide:
+
+- `agent.delegate({worktree, slug, sparse_pattern})` — delegation cap with worktree isolation (§10.1)
+- `agent.merge_worktree({slug, mode})` — merge/abort flow (§10.2)
+- Phase folder scaffolding (status transitions, preload chain validation, `expires-at` enforcement)
+- T3-only: template-chain walking + autonomous trigger registration
+
+Tooling MAY provide: scheduled execution, multi-phase orchestration UIs, delegate-cap audit trails.
+
+## 16. Adoption Path
 
 For frameworks adopting PHASE, the order matters.
 
@@ -672,7 +691,7 @@ Signals that T3 is worth the cost:
 
 If those signals don't fire, T3 may be over-engineering for your use case. **T2 is enough for most projects.** T3 exists for specific shapes: scheduled autonomous audits, agents-spawning-agents, runtimes where loading is per-phase.
 
-## 16. Future Directions
+## 17. Future Directions
 
 ### 12.1 Multi-Agent Parallel Phases
 
