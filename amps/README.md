@@ -3,10 +3,11 @@ type: spec
 status: draft
 version: 1.1.0
 created: 2026-03-11
-updated: 2026-03-16
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
 extends: amp/0.3
+complements: maps/0.1, phase/0.3, mlx/0.1
 ---
 
 # AMPS — Agent Memory Protocol Stack v1.1

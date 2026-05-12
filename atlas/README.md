@@ -3,9 +3,10 @@ type: spec
 status: draft
 version: 0.2.0
 created: 2026-03-10
-updated: 2026-03-28
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
+complements: amp/0.3, seams/0.2, seeds/0.2, phase/0.3
 ---
 
 # ATLAS — Architecture Truth Layered Across Stacks

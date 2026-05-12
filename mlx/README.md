@@ -6,7 +6,7 @@ created: 2026-05-12
 updated: 2026-05-12
 author: Curtis Mercier + s01-643d67 (Soma)
 license: CC BY 4.0
-complements: amp/0.3, seams/0.2, breath-cycle/0.2
+complements: amp/0.3, seams/0.2, breath-cycle/0.2, phase/0.3, mlr/0.1
 ---
 
 # MLX — Memory Lane Xtraction v0.1

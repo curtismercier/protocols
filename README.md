@@ -15,7 +15,7 @@
 
 ## What This Is
 
-Eleven protocol specifications that define how AI agents can persist memory, navigate knowledge, orchestrate multi-phase work, maintain architecture awareness, discover identity, and manage session lifecycles — all without external databases.
+Twelve protocol specifications that define how AI agents can persist memory, navigate knowledge, orchestrate multi-phase work, maintain architecture awareness, discover identity, manage session lifecycles, and project documents across human/agent/tooling surfaces — all without external databases.
 
 These protocols were invented while building **[Soma](https://soma.gravicity.ai)**, an AI coding agent with self-growing memory. They're published here as standalone specifications that any agent framework can implement.
 
@@ -36,8 +36,9 @@ Eleven specs in five layers. Each spec stands alone; together they form an agent
 | Protocol | Spec | Description |
 |----------|------|-------------|
 | **[Breath Cycle](./breath-cycle/)** | v0.2 | Inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design, not bug |
-| **[PHASE](./phase/)** | v0.2 *(v0.3 [draft](./phase/v0.3-draft.md))* | Plan-driven brain configuration via prompt config or self-contained phase folders. v0.3 draft adds meta-orchestration + delegation-owned worktrees |
+| **[PHASE](./phase/)** | v0.3 | Three-tier brain configuration (T1 prompt-config, T2 phase-folder convention, T3 runtime) + meta-orchestration cycle + delegation-owned worktrees |
 | **[MLX](./mlx/)** | v0.1 | **Memory Lane Xtraction** — periodic audit before session close. What's still floating in the agent's head that isn't on disk? |
+| **[MLR](./mlr/)** | v0.1 | **Mid-session Learning Review** — in-flight catch. PAUSE → NAME → FILE → RESUME when a pattern emerges during work. Sibling to MLX. |
 
 ### Provenance & growth
 

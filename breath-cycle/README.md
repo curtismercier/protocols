@@ -3,9 +3,10 @@ type: spec
 status: draft
 version: 0.2.0
 created: 2026-03-10
-updated: 2026-03-10
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
+complements: amp/0.3, phase/0.3, mlx/0.1, mlr/0.1
 ---
 
 # Breath Cycle — Specification v0.2

@@ -3,7 +3,7 @@ type: spec
 status: draft
 version: 0.3.0
 created: 2026-03-10
-updated: 2026-03-11
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
 ---

@@ -3,9 +3,10 @@ type: spec
 status: draft
 version: 0.1.0
 created: 2026-03-10
-updated: 2026-03-10
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
+complements: amp/0.3, amps/1.1, breath-cycle/0.2
 ---
 
 # Agent Identity System — Specification v0.1

@@ -1,21 +1,23 @@
 ---
 type: spec
 status: draft
-version: 0.2.0
+version: 0.3.0
 created: 2026-03-16
-updated: 2026-03-28
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
-extends: amps/1.0
-complements: maps/0.1, breath-cycle/0.2, seams/0.2, seeds/0.2, atlas/0.2
+extends: amps/1.1
+complements: maps/0.1, breath-cycle/0.2, seams/0.2, seeds/0.2, atlas/0.2, mlx/0.1, mlr/0.1
 ---
 
-# PHASE — Prompt Handoff for Agent Session Evolution v0.2
+# PHASE — Prompt Handoff for Agent Session Evolution v0.3
 
 > A protocol for reshaping an agent's brain per task and cascading refinements across phases. The plan doesn't just tell the agent what to do — it configures how the agent thinks.
 
-*Extends: [AMPS v1.0](../amps/) (Agent Memory Protocol Stack)*
-*Complements: [MAPS v0.1](../maps/), [Breath Cycle v0.2](../breath-cycle/), [SEAMS v0.2](../seams/), [SEEDS v0.2](../seeds/), [ATLAS v0.2](../atlas/)*
+*Extends: [AMPS v1.1](../amps/) (Agent Memory Protocol Stack)*
+*Complements: [MAPS v0.1](../maps/), [Breath Cycle v0.2](../breath-cycle/), [SEAMS v0.2](../seams/), [SEEDS v0.2](../seeds/), [ATLAS v0.2](../atlas/), [MLX v0.1](../mlx/), [MLR v0.1](../mlr/)*
+
+*v0.3 absorbs the [v0.3-draft companion](../_archive/phase-v0.3-draft-companion.md) into the canonical spec — adds the T2 Convention tier, the meta-orchestration cycle, and delegation-owned worktrees. v0.2 mechanisms preserved.*
 
 ## 1. The Insight
 
@@ -25,19 +27,31 @@ A refactoring session needs `incremental-refactor` hot — the task requires it,
 
 PHASE lets the task configure the agent. The agent boots with a brain shaped for the work. And when that agent finishes, it refines the configuration for the next one.
 
-## 2. Two Mechanisms
+## 2. Three Tiers
 
-PHASE operates through two mechanisms. They solve the same problem — task-driven brain configuration — at different scales.
+PHASE operates through three tiers, ranked by leverage and cost. Production experience across `arzadon-fitness` and `meetsoma` showed that the original v0.2 two-tier split (Lightweight + Heavyweight) was missing the middle rung where most multi-session work actually lives.
 
-### Lightweight: Prompt Configuration
+| Tier | What it is | When | Cost |
+|---|---|---|---|
+| **T1 — Prompt Configuration** (§3) | `prompt-config:` frontmatter on a MAP | Quick session-level overrides | Zero — frontmatter convention |
+| **T2 — Phase Folder Convention** (§4) | Phase folder shape without runtime | Multi-session arcs, delegated work, parallel cycles | Days — convention + manual orchestration |
+| **T3 — Phase Folder Runtime** (§5) | Template-chain runtime, autonomous triggers, state machine | Autonomous multi-phase execution | Weeks — real implementation work |
 
-For ad-hoc tasks, quick overrides, or single-session work. The configuration lives in the MAP's frontmatter.
+**The recommended adoption path** is T1 → T2 → T3 (see §15). Most frameworks adopting PHASE will live in T2 indefinitely; T3 is only worth its cost when the convention has been lived in for multiple cycles and specific signals fire (see §15.3).
 
-### Heavyweight: Phase Folders
+### Lightweight: Prompt Configuration (T1)
 
-For multi-session projects with chained phases. Each phase is a self-contained agent context — its own body, muscles, protocols, and preloads. The template system resolves the folder as a mini agent boot environment.
+For ad-hoc tasks, quick overrides, or single-session work. The configuration lives in the MAP's frontmatter. See §3.
 
-Most tasks start with prompt configuration. When a task grows beyond one session or needs autonomous chaining, it graduates to phase folders. Both use the same principles: the task configures the brain, and the completing agent refines the next phase.
+### Convention: Phase Folders (T2)
+
+Phase folder shape without runtime support. Captures most of the value (organization, handoff discipline, delegation contracts) at near-zero implementation cost. See §4.
+
+### Heavyweight: Phase Folder Runtime (T3)
+
+For multi-session projects with chained phases and autonomous execution. Each phase is a self-contained agent context — its own body, muscles, protocols, and preloads. The template system resolves the folder as a mini agent boot environment. See §5.
+
+Most tasks start at T1. When a task grows beyond one session, it graduates to T2 (the convention). T3 is earned when autonomous chaining is a real requirement. All three use the same principle: the task configures the brain, and the completing agent refines the next phase.
 
 ## 3. Prompt Configuration (Lightweight)
 
@@ -144,7 +158,69 @@ identity: |
   Your output is an interface design, not code.
 ```
 
-## 4. Phase Folders (Heavyweight)
+## 4. Phase Folder Convention (T2)
+
+The T2 tier is the **convention** — the phase folder shape, the preload-chain handoff, and the frontmatter contract — without the runtime that walks templates or triggers autonomous execution. This is what most projects need.
+
+### 4.1 Shape
+
+A phase folder is a directory with this shape (all parts optional except `README.md`):
+
+```
+<phase-name>/
+├── README.md                ← required: spec + status + TL;DR + contract
+├── body/
+│   └── soul.md              ← phase-specific identity supplement (T3 only)
+├── muscles/                 ← phase-specific muscles (T3 only)
+├── protocols/               ← phase-specific protocols (T3 only)
+├── scripts/                 ← phase-specific scripts
+├── preload-in.md            ← context FROM previous phase
+├── preload-out.md           ← context FOR next phase (written at close)
+└── report.md                ← deliverable (when phase produces evidence)
+```
+
+A folder containing ONLY `README.md` is still a valid phase folder. The shape upgrades as content grows: a flat `<slug>.md` becomes `<slug>/README.md` when a sibling file (preload, report, script) needs to live alongside it.
+
+### 4.2 Frontmatter contract
+
+The README's frontmatter declares the phase's contract:
+
+```yaml
+---
+type: phase
+slug: <kebab-case>
+status: queued | active | shipped | parked | superseded
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+session_origin: s01-XXXXXX
+
+# Delegation (when applicable)
+delegated: true
+delegated_model: claude-sonnet-4-6
+time_box_minutes: 30
+
+# Worktree isolation (when applicable; abstracts to delegate cap — see §10)
+worktree: <repo>/.worktrees/<slug>
+branch: child/<slug>
+sparse_pattern: [src/components/X, tests/X.test.ts]
+
+# Lifecycle
+expires-at: shipped+1   # auto-archive after holding ≥1 release past ship
+superseded-by: <path>   # forward-link when retired
+---
+```
+
+### 4.3 Handoff via preload chain
+
+Phase N writes `preload-out.md` at close. Phase N+1's `preload-in.md` is a literal copy or symlink. The handoff is filesystem-mediated, explicit, durable. This is sufficient without runtime support — the agent reads `preload-in.md` as part of orientation when it boots into the phase folder.
+
+### 4.4 Delegation through the convention
+
+When a phase is delegated, the worktree fields in frontmatter point at the isolated child branch. **The convention's job:** record what was used (provenance). **The delegate cap's job:** create + manage the worktree (see §10).
+
+T2 phases declare their isolation requirements; the delegate tool actuates them. The phase folder doesn't need scripts to manage worktrees — those abstract into the agent's tool surface.
+
+## 5. Phase Folder Runtime (T3)
 
 When a task spans multiple sessions and requires autonomous chaining, the configuration moves from MAP frontmatter into the filesystem. Each phase becomes a self-contained agent boot context:
 
@@ -234,7 +310,7 @@ The `{{preload}}` variable loads from `preload-in.md`. The `{{state}}` loads fro
 | Quick override ("load this muscle") | Prompt config |
 | Community-shareable task template | Phase type seed (§5) |
 
-## 5. Phase Types
+## 6. Phase Types
 
 Not all phases are alike. A build phase needs different muscles than an audit phase. Phase types are [SEEDS](../seeds/) templates that scaffold phase folders with pre-selected muscles, protocols, and MAP templates:
 
@@ -279,7 +355,7 @@ soma phase new --type code-review --project my-app --name pr-42
 
 The type is itself a [SEED](../seeds/) — it evolves through use, carries a changelog and gaps section, and can be versioned and distributed.
 
-## 6. Targeted Preloads
+## 7. Targeted Preloads
 
 A PHASE-configured session can include a **targeted preload** — a context document written by a previous session specifically for this task.
 
@@ -312,7 +388,7 @@ The preload chain IS the handoff. Phase 1's `preload-out.md` becomes Phase 2's `
 | **Contains** | Resume point, what shipped | Deep task context, warnings | Handoff context + refinements |
 | **Lifetime** | One session | Until MAP completes | Until next phase completes |
 
-## 7. Cascading Evolution
+## 8. Cascading Evolution
 
 The core pattern: **the completing agent refines the next phase.**
 
@@ -366,7 +442,78 @@ Phase Handoff:
 6. Drop inbox message if inter-phase coordination needed
 ```
 
-## 8. Autonomous Execution
+## 9. Meta-Orchestration Cycle
+
+A discovery from production: **the parent agent needs its own cycle.** It runs while every other phase runs. The meta-orchestration cycle is the spine that holds the whole tree of phases.
+
+### 9.1 The four moves
+
+```
+DO → WATCH → DECIDE → CLOSE → DO
+```
+
+- **DO** — pick the highest-leverage thing and ship it
+- **WATCH** — check on every active child (`agent.list({active_only: true})`)
+- **DECIDE** — for each child: continue / steer / harvest / kill / re-task
+- **CLOSE** — when something ships, write the cycle/plan delta, update state
+
+Every loop, rotate. None optional. Don't skip WATCH and DECIDE because DO is fun.
+
+### 9.2 Where it lives
+
+The meta-orchestration cycle is a phase folder at the project's `cycles/meta/orchestration/`. It's `status: living` — it never ships, it evolves. Its `README.md` describes the rhythm, the delegate-vs-do criteria, the child-orchestration playbook, and known gaps.
+
+### 9.3 Relationship to Breath Cycle
+
+[Breath Cycle](../breath-cycle/) governs the session lifecycle (inhale → process → exhale). The meta-orchestration cycle governs the *within-process* rhythm — what the agent does between inhale and exhale.
+
+MLX (see [MLX v0.1](../mlx/)) is the audit pass that runs at the boundary of CLOSE → next-DO.
+
+## 10. Delegation Tooling
+
+Production experience: **per-cycle worktrees should be a property of the DELEGATION cap, not the cycle.**
+
+In the v0.2 spec, the phase folder owned the worktree config. Production showed this leaks complexity into every cycle that delegates. The cleaner abstraction:
+
+### 10.1 The delegate cap learns worktree
+
+```
+agent.delegate({
+  task: "...",
+  role: "auditor",
+  model: "claude-sonnet-4-6",
+  background: true,
+  worktree: true,                    // create isolated worktree
+  slug: "01-housekeeping-sweep",     // becomes child/<slug> branch
+  sparse_pattern: [...],             // optional: sparse-checkout
+  base: "main"                       // base branch (default: HEAD)
+})
+```
+
+The cap creates `<repo>/.worktrees/<slug>/` on `child/<slug>` branch, applies sparse patterns if specified, spawns the child process inside the worktree. The phase folder's frontmatter records what was used (provenance). The cap orchestrates the worktree.
+
+### 10.2 The merge cap closes the loop
+
+```
+agent.merge_worktree({
+  slug: "01-housekeeping-sweep",
+  mode: "review" | "fast-forward" | "abort"
+})
+```
+
+- `review` — print `git diff main..child/<slug>`, wait for parent decision
+- `fast-forward` — ff-merge child branch to main, push, remove worktree + branch
+- `abort` — discard child branch, remove worktree
+
+Status flows back to the phase folder: when merged, `status: shipped`. When aborted, `status: parked`.
+
+### 10.3 Why this matters
+
+**Before:** every cycle that delegates needs its own worktree script + boilerplate. The cycle dir grew complexity.
+
+**After:** the cycle declares isolation requirements; the cap actuates. One implementation, infinite uses. The same abstraction extends to non-cycle delegations (one-off audits, ad-hoc parallel work). Worktree isolation isn't a cycle property — it's a delegation property.
+
+## 11. Autonomous Execution
 
 Phase folders enable autonomous multi-session execution. Combined with scheduling (cron, pulse, inbox triggers), phases can chain without human intervention:
 
@@ -411,7 +558,7 @@ phases:
 
 The phase runner reads this to determine what to execute. When a phase completes, the runner advances the state machine. If a phase fails, the state stays — reboot with the same preload-in to retry.
 
-## 9. Invocation
+## 12. Invocation
 
 ### Prompt Config Mode
 
@@ -447,7 +594,7 @@ The boot sequence:
 
 When the session ends, the agent writes `preload-out.md` and updates state.
 
-## 10. Relationship to Other Protocols
+## 13. Relationship to Other Protocols
 
 ```
   A M P S           ← content types
@@ -469,8 +616,22 @@ PHASE is the vertical spine of the protocol family. Everything crosses through i
 - **ATLAS** maintains ground truth. Each phase reads its scope's STATE.md for orientation before starting work. The completing phase updates STATE.md.
 - **Breath Cycle** governs the session. Prompt config operates within one breath — inhale through exhale. Phase folders span multiple breaths — the preload chain carries context across.
 - **Identity** provides the chain. Prompt config adds a supplementary layer. Phase folders override with a phase-specific `soul.md`.
+- **MLX** is the audit pass at phase close — "what's still in the agent's head that isn't on disk?" §9's meta-orchestration cycle includes MLX naturally between CLOSE and the next DO.
+- **MLR** is the mid-cycle learning review — run during long phases when patterns emerge that should reshape body/muscles/protocols mid-flight, not just at session close.
+- **PRISM** ([sibling repo](https://github.com/curtismercier/prism)) provides the document substrate for phase artifacts. T2 phase folders MAY author their READMEs as PRISM artifacts, enabling section-anchored surgical edits without whole-file rereads.
 
-## 11. Anti-Patterns
+## 14. Anti-Patterns
+
+### v0.3 additions
+
+- **Skipping T2 and going straight to T3.** Implementing the runtime before living in the convention means you'll build for assumptions that the convention would have falsified. Earn the runtime.
+- **Hard-coding worktrees in cycle dirs.** Worktree isolation is a delegation concern, not a cycle concern. Extract it to the delegate cap (§10).
+- **Writing ad-hoc work plans without phase-folder shape.** Even a tiny one-line plan goes in `<slug>/README.md`, not `<slug>.md`. The folder is the upgrade path.
+- **Phase folder without README.md.** A phase without a contract is a phase that won't be honored. README.md is required.
+- **Implicit handoff.** Hoping the next phase reads the previous one's commits or session log is wishful thinking. `preload-out.md` is the contract; its absence breaks the chain.
+- **Skipping WATCH and DECIDE in the meta-orchestration cycle.** DO is fun. WATCH catches drift. DECIDE prevents waste. CLOSE makes the work durable. All four moves, every loop.
+
+### v0.2 anti-patterns (retained)
 
 - **Over-configuring early phases** — Phase 0's config should be thorough. Phase 3's config should be rough. The completing agents will refine it.
 - **Permanent heat mutation** — PHASE overrides are temporary. Never modify `state.json` or frontmatter heat from a plan config. The override lives and dies with the session.
@@ -480,7 +641,35 @@ PHASE is the vertical spine of the protocol family. Everything crosses through i
 - **Phase folders for single-session tasks** — overhead without benefit. Use prompt config for quick overrides. Graduate to folders when the task spans sessions.
 - **Isolated phase folders** — a phase folder that doesn't write `preload-out.md` or update project state breaks the chain. The handoff is not optional.
 
-## 12. Future Directions
+## 15. Adoption Path
+
+For frameworks adopting PHASE, the order matters.
+
+### 15.1 Land T2 conventions first (1–2 weeks of disciplined use)
+
+1. Standardize the phase folder shape across cycles, plans, and work units
+2. Establish preload-in / preload-out as the handoff convention
+3. Adopt the meta-orchestration cycle as the spine
+4. Write 5–10 phases in this shape; observe what emerges
+
+### 15.2 Add delegation tooling (1–2 days)
+
+1. Extend delegate cap with `worktree:`, `slug:`, `sparse_pattern:` args
+2. Add merge cap for the close-the-loop flow
+3. Smoke-test against a real delegated phase
+
+### 15.3 Earn T3 runtime when convention pressure demands it
+
+Signals that T3 is worth the cost:
+
+- Phases routinely need different muscles than the parent's hot set
+- Phases need different identities than the project's
+- Multi-phase autonomous execution is a real use case (cron, scheduled audits)
+- The pain of manually loading phase-folder content per session is consistent
+
+If those signals don't fire, T3 may be over-engineering for your use case. **T2 is enough for most projects.** T3 exists for specific shapes: scheduled autonomous audits, agents-spawning-agents, runtimes where loading is per-phase.
+
+## 16. Future Directions
 
 ### 12.1 Multi-Agent Parallel Phases
 

@@ -3,10 +3,11 @@ type: spec
 status: draft
 version: 0.1.0
 created: 2026-03-16
-updated: 2026-03-16
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
-extends: amps/1.0
+extends: amps/1.1
+complements: phase/0.3, seams/0.2, identity/0.1
 ---
 
 # MAPS — My Automation Protocol Scripts v0.1

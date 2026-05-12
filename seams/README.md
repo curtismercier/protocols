@@ -3,11 +3,11 @@ type: spec
 status: draft
 version: 0.2.0
 created: 2026-03-16
-updated: 2026-03-28
+updated: 2026-05-12
 author: Curtis Mercier
 license: CC BY 4.0
 extends: amp/0.3
-complements: phase/0.1, seeds/0.1, maps/0.1, atlas/0.2
+complements: phase/0.3, seeds/0.2, maps/0.1, atlas/0.2, mlx/0.1
 ---
 
 # SEAMS — Session Evolution Archival for Memory Systems v0.2
