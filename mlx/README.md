@@ -128,7 +128,37 @@ Bundle-commit all MLX'd items in one batch. Useful at session close.
 
 ---
 
-## 5. Relationship to Other Protocols
+## 5. Anti-Patterns
+
+- **"I'll file it at session close."** That's the gap MLX is meant to close, not a deferral mechanism. If the lesson is hot, file it now (that's MLR); if it's lingering, surface it at audit time (that's MLX). Saying "I'll MLX it later" is just stalling.
+- **MLX as confession.** The audit is for filing-where-it-fires, not for cataloging the day's errors. If items are getting filed into a single rolling log instead of distributed to their trigger locations, the discipline has decayed into journaling.
+- **"Filed in my head."** The phrase itself is the tell. Anytime an agent uses it without a concrete on-disk destination in the same sentence, the item is *not* filed. The phrase should fire MLX immediately. (See `voice.md` lock-in patterns.)
+- **Master-list MLX.** Building a single "things I learned" file at `body/mlx-log.md` defeats the point. Each item should land where its trigger fires — the trap goes to `traps.md`, the muscle stub goes to `amps/muscles/`, the code-seam goes inline. A master list is a search problem; trigger-located lessons are an automatic problem.
+- **Recursive audit, not just one pass.** Curtis caught me s01-643d67 doing one MLX pass and calling it done. Pass-2 surfaces items pass-1 freed up. Bottom out the recursion.
+- **Skipping MLX when the human says "ok."** The corollary in §3.5 — human acks presume audit-passed. Don't use "ok" as a reason to skip the audit; use it as a reason to *finish* the audit cleanly. The discipline is the agent's, not the human's.
+
+## 6. Conformance
+
+An MLX-conformant practice MUST:
+
+1. Run at session close (mandatory) and MAY run at natural pauses
+2. Name each candidate item explicitly before filing
+3. File each item at a location where the trigger will *recurringly* find it (not session log alone)
+4. Be recursive — run audit pass N+1 until "nothing new" returns
+5. Distinguish "noted" (session log only) from "locked in" (filed at trigger)
+
+A MLX-conformant tooling layer SHOULD provide:
+
+- `mlx:audit` — the explicit pause + candidate-list operation
+- `mlx:file <item> --to <destination>` — single-item filer with destination validation
+- `mlx:checkpoint` — batch-commit all MLX'd items in one shot
+
+Tooling MAY also provide:
+
+- Detection of "filed in my head" or "I'll lock this in" phrases without concrete destinations
+- Cross-session MLX rollup (catch items whose triggers haven't fired in N sessions)
+
+## 7. Relationship to Other Protocols
 
 | Protocol | Concern | MLX relationship |
 |----------|---------|-------------------|
@@ -140,7 +170,7 @@ Bundle-commit all MLX'd items in one batch. Useful at session close.
 
 ---
 
-## 6. Status
+## 8. Status
 
 **Version**: 0.1 (draft, this file).
 **Named**: Curtis Mercier, s01-643d67 (2026-05-12).
@@ -155,7 +185,7 @@ Bundle-commit all MLX'd items in one batch. Useful at session close.
 
 ---
 
-## 7. Acknowledgments
+## 9. Acknowledgments
 
 Pattern named by Curtis Mercier when Soma surfaced "anything else not yet noted" before session close. The acronym choice was Curtis's; the X for "Xtraction" rhymes visually with the family cadence (AMP / MAPS / SEAMS / SEEDS / ATLAS — three-to-five letter backronyms with character).
 

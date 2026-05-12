@@ -597,13 +597,16 @@ When the session ends, the agent writes `preload-out.md` and updates state.
 ## 13. Relationship to Other Protocols
 
 ```
-  A M P S           ← content types
+          P R I S M           ← document substrate (sibling repo)
+               ↓
+  A M P S                     ← content types
       H
-    M A P S         ← navigation
-      S E A M S     ← traceability
-  S E E D S         ← templates
+    M A P S                   ← navigation
+      S E A M S               ← traceability
+  S E E D S                   ← templates
+     M L X / M L R            ← learning discipline (close + in-flight)
       ↑
-    PHASE            ← the spine
+    PHASE                      ← the spine
 ```
 
 PHASE is the vertical spine of the protocol family. Everything crosses through it:
