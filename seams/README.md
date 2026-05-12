@@ -15,7 +15,7 @@ complements: phase/0.3, seeds/0.2, maps/0.1, atlas/0.2, mlx/0.1
 > Traceable connections between every artifact an agent produces. Two dimensions: **session seams** trace time (what produced this?), **document seams** trace space (what connects to this?). Pull any seam and the whole chain follows.
 
 *Extends: [AMP v0.3](../amp/) (Agent Memory Protocol)*
-*Complements: [PHASE v0.1](../phase/), [SEEDS v0.1](../seeds/), [MAPS v0.1](../maps/), [ATLAS v0.2](../atlas/)*
+*Complements: [PHASE v0.3](../phase/), [SEEDS v0.2](../seeds/), [MAPS v0.1](../maps/), [ATLAS v0.2](../atlas/), [MLX v0.1](../mlx/)*
 
 ## 1. The Problem
 
@@ -365,7 +365,7 @@ Traces a concept through its evolution stages: idea → plan → MAP → code �
 
 *SEAMS v0.2 — Curtis Mercier — CC BY 4.0*
 *Extends: Agent Memory Protocol (AMP) v0.3*
-*Complements: PHASE v0.1, SEEDS v0.1, MAPS v0.1, ATLAS v0.2*
+*Complements: PHASE v0.3, SEEDS v0.2, MAPS v0.1, ATLAS v0.2, MLX v0.1*
 *Reference implementation: Soma (soma.gravicity.ai)*
 
 ### Changelog

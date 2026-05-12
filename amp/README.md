@@ -229,7 +229,7 @@ An AMP extension:
 - May define evolution paths between types
 - May define dependency resolution between content
 
-The reference extension is **[AMPS v1.0](../amps/)**. Navigation and orchestration extensions include **[MAPS](../maps/)** and **[PHASE](../phase/)**.
+The reference extension is **[AMPS v1.1](../amps/)**. Navigation and orchestration extensions include **[MAPS](../maps/)** and **[PHASE](../phase/)**.
 
 ## 11. Implementation Notes
 

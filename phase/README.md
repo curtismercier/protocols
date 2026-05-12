@@ -707,9 +707,9 @@ An agent that completes Phase N could generate Phase N+1's folder entirely — s
 
 ---
 
-*PHASE v0.2 — Curtis Mercier — CC BY 4.0*
-*Extends: AMPS v1.0 (Agent Memory Protocol Stack)*
-*Complements: MAPS v0.1, Breath Cycle v0.2, SEAMS v0.2, SEEDS v0.2, ATLAS v0.2*
+*PHASE v0.3 — Curtis Mercier — CC BY 4.0*
+*Extends: AMPS v1.1 (Agent Memory Protocol Stack)*
+*Complements: MAPS v0.1, Breath Cycle v0.2, SEAMS v0.2, SEEDS v0.2, ATLAS v0.2, MLX v0.1, MLR v0.1*
 *Reference implementation: Soma (soma.gravicity.ai)*
 
 ### Changelog

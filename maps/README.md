@@ -14,7 +14,7 @@ complements: phase/0.3, seams/0.2, identity/0.1
 
 > The navigation layer over AMPS. Before starting any task, check if a MAP exists. A MAP tells you which muscles to load, which protocols to follow, which scripts to run, and in what order.
 
-*Extends: [AMPS v1.0](../amps/) (Agent Memory Protocol Stack)*
+*Extends: [AMPS v1.1](../amps/) (Agent Memory Protocol Stack)*
 
 ## 1. The Problem
 
@@ -210,5 +210,5 @@ A MAP without PHASE works fine — the agent follows steps with whatever brain c
 ---
 
 *MAPS v0.1 — Curtis Mercier — CC BY 4.0*
-*Extends: AMPS v1.0 (Agent Memory Protocol Stack)*
+*Extends: AMPS v1.1 (Agent Memory Protocol Stack)*
 *Reference implementation: Soma (soma.gravicity.ai)*

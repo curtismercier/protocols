@@ -15,7 +15,7 @@ complements: phase/0.3, seams/0.2, maps/0.1, atlas/0.2
 > Drop a seed in any folder and it tells the agent how to grow that folder. Templates that evolve through use, scaffolding that improves over time, structure that teaches itself.
 
 *Extends: [AMP v0.3](../amp/) (Agent Memory Protocol)*
-*Complements: [PHASE v0.1](../phase/), [SEAMS v0.2](../seams/), [MAPS v0.1](../maps/), [ATLAS v0.2](../atlas/)*
+*Complements: [PHASE v0.3](../phase/), [SEAMS v0.2](../seams/), [MAPS v0.1](../maps/), [ATLAS v0.2](../atlas/)*
 
 ## 1. The Problem
 
@@ -437,7 +437,7 @@ Traces a seed from idea through scaffolding through implementation through compl
 
 *SEEDS v0.2 — Curtis Mercier — CC BY 4.0*
 *Extends: Agent Memory Protocol (AMP) v0.3*
-*Complements: PHASE v0.1, SEAMS v0.2, MAPS v0.1, ATLAS v0.2*
+*Complements: PHASE v0.3, SEAMS v0.2, MAPS v0.1, ATLAS v0.2*
 *Reference implementation: Soma (soma.gravicity.ai)*
 
 ### Changelog

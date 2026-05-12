@@ -21,7 +21,7 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 
 ## The Protocols
 
-Eleven specs in five layers. Each spec stands alone; together they form an agent's substrate.
+Twelve specs in five layers. Each spec stands alone; together they form an agent's substrate.
 
 ### Substrate
 
@@ -65,7 +65,7 @@ Eleven specs in five layers. Each spec stands alone; together they form an agent
 | Protocol | Spec | Description |
 |----------|------|-------------|
 | ~~[Git Identity](./_archive/git-identity/)~~ | v0.2 | Folded into Identity System |
-| ~~[Capability Model](./three-layer/)~~ | v0.2 | Superseded by AMPS v1.0 |
+| ~~[Capability Model](./three-layer/)~~ | v0.2 | Superseded by AMPS v1.1 |
 
 ### How They Fit Together
 
@@ -118,7 +118,7 @@ This works because:
 
 ## Status
 
-These specs are in **draft** (v0.1–v0.2). They describe systems that are implemented and working in Soma, but the spec documents are still being refined.
+These specs are in **draft** (v0.1–v1.1, varying per spec). They describe systems that are implemented and working in Soma, but the spec documents are still being refined. Family-level milestones are tagged (`family-v0.4` at HEAD as of 2026-05-12); per-spec versions live in each spec's frontmatter. See [CHANGELOG.md](./CHANGELOG.md).
 
 Feedback, questions, and implementation reports welcome — [open an issue](https://github.com/curtismercier/protocols/issues).
 

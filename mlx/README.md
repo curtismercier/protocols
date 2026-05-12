@@ -13,7 +13,7 @@ complements: amp/0.3, seams/0.2, breath-cycle/0.2, phase/0.3, mlr/0.1
 
 > A periodic discipline: explicitly audit what's still "floating in the agent's head" that should be on disk, and extract it before the session ends or rotates. Counterpart to MLR (Mid-session Learning Review) — MLR captures what was *learned*; MLX captures what hasn't been *written down yet*.
 
-*Complements: [AMP v0.3](../amp/), [SEAMS v0.2](../seams/), [Breath Cycle v0.2](../breath-cycle/)*
+*Complements: [AMP v0.3](../amp/), [SEAMS v0.2](../seams/), [Breath Cycle v0.2](../breath-cycle/), [PHASE v0.3](../phase/), [MLR v0.1](../mlr/)*
 
 *Named by Curtis Mercier on 2026-05-12 (s01-643d67) when Soma listed "things still in my head" before session close. The pattern was already in use; this spec articulates it.*
 
