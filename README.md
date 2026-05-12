@@ -21,22 +21,50 @@ These protocols were invented while building **[Soma](https://soma.gravicity.ai)
 
 ## The Protocols
 
+Eleven specs in five layers. Each spec stands alone; together they form an agent's substrate.
+
+### Substrate
+
 | Protocol | Spec | Description |
 |----------|------|-------------|
 | **[AMP](./amp/)** | v0.3 | **Agent Memory Protocol** — filesystem-based persistent memory with heat tracking, checkpoints, flush pipeline, and pattern evolution |
-| **[AMPS](./amps/)** | v1.0 | **Agent Memory Protocol Stack** — four content types that extend AMP: Automations, Muscles, Protocols, Skills |
+| **[AMPS](./amps/)** | v1.1 | **Agent Memory Protocol Stack** — four content types over AMP: Automations, Muscles, Protocols, Scripts |
 | **[MAPS](./maps/)** | v0.1 | **My Automation Protocol Scripts** — navigation layer over AMPS. Task-specific paths through knowledge, with progressive phase chains |
-| **[PHASE](./phase/)** | v0.2 | **Prompt Handoff for Agent Session Evolution** — plan-driven brain configuration via prompt config or self-contained phase folders, with cascading refinement and autonomous execution |
-| **[SEAMS](./seams/)** | v0.2 | **Session Evolution Archival for Memory Systems** — traceable connections between every artifact. Session seams trace time, document seams trace space. Pull any seam and the whole chain follows |
-| **[SEEDS](./seeds/)** | v0.2 | **Self-Evolving Experience Discovery Structure** — templates that grow structure with origin provenance and typed scaffolding. Drop a seed in any folder and it tells the agent how to grow |
-| **[ATLAS](./atlas/)** | v0.2 | **Architecture Truth Layered Across Stacks** — living system maps with staleness signals, inline maintenance markers, and companion documents |
-| **[Breath Cycle](./breath-cycle/)** | v0.2 | **Session lifecycle** — inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design constraint |
-| **[Identity System](./identity/)** | v0.1 | **Contextual identity** — agents discover who they are based on where they are |
-| **[Git Identity](./git-identity/)** | v0.2 | **Multi-repo attribution** — identity zones, path-based resolution, agent vs human commits |
 
-| Archived | | |
+### Session lifecycle
+
+| Protocol | Spec | Description |
 |----------|------|-------------|
-| ~~[Capability Model](./three-layer/)~~ | v0.2 | Superseded by **AMPS v1.0** |
+| **[Breath Cycle](./breath-cycle/)** | v0.2 | Inhale (boot) → process (work) → exhale (flush) → rest. Context depletion as design, not bug |
+| **[PHASE](./phase/)** | v0.2 *(v0.3 [draft](./phase/v0.3-draft.md))* | Plan-driven brain configuration via prompt config or self-contained phase folders. v0.3 draft adds meta-orchestration + delegation-owned worktrees |
+| **[MLX](./mlx/)** | v0.1 | **Memory Lane Xtraction** — periodic audit before session close. What's still floating in the agent's head that isn't on disk? |
+
+### Provenance & growth
+
+| Protocol | Spec | Description |
+|----------|------|-------------|
+| **[SEAMS](./seams/)** | v0.2 | Traceable connections between every artifact. Session seams trace time, document seams trace space |
+| **[SEEDS](./seeds/)** | v0.2 | Templates that grow structure with origin provenance and typed scaffolding. Drop a seed in any folder and it tells the agent how to grow |
+| **[ATLAS](./atlas/)** | v0.2 | Living system maps with staleness signals, inline maintenance markers, and companion documents |
+
+### Identity
+
+| Protocol | Spec | Description |
+|----------|------|-------------|
+| **[Identity System](./identity/)** | v0.1 | Contextual identity — agents discover who they are based on where they are |
+
+### Document substrate (sibling repo)
+
+| Protocol | Spec | Description |
+|----------|------|-------------|
+| **[PRISM](https://github.com/curtismercier/prism)** | v0.1 | **Projected Representations from Inscribed Source Markup** — one Markdown source, three projections (HTML, JSON, agent anchors). Lives in its own repo alongside reference implementations |
+
+### Archived
+
+| Protocol | Spec | Description |
+|----------|------|-------------|
+| ~~[Git Identity](./_archive/git-identity/)~~ | v0.2 | Folded into Identity System |
+| ~~[Capability Model](./three-layer/)~~ | v0.2 | Superseded by AMPS v1.0 |
 
 ### How They Fit Together
 
